@@ -1,15 +1,20 @@
 const express = require('express')
 const dotenv = require('dotenv')
+const cookieParser = require('cookie-parser')
+
+const dbConnection = require('./config/dbConnect')
+const initRoute = require('./routes')
 
 const app = express()
 
 dotenv.config()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(cookieParser())
 
-app.use('/',(req,res)=>{
-    res.send('Hello World')
-})
+dbConnection()
+
+initRoute(app)
 
 app.listen(process.env.PORT,()=>{
     console.log(`Server is running on port ${process.env.PORT}`)
