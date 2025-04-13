@@ -177,6 +177,45 @@ const updateUserByAdmin = asyncHandler(async (req,res) => {
   })
 })
 
+const updateUserAdress = asyncHandler(async (req,res) => {
+  const {_id} = req.user;
+  if(!req.body.address) throw new Error('Missing input');
+  const user = await User.findByIdAndUpdate(_id,{ $push: { address:  req.body.address } }, {new: true}).select('-password -refreshToken -role');
+  return res.status(200).json({
+    success: user ? true : false,
+    deleteUsers: user ? user : 'No user update'
+  })
+})
+
+const updateCart = asyncHandler(async (req,res) => {
+  const {_id} = req.user;
+  const { pid, quantity, color} = req.body;
+  if(!pid || !quantity || !color) throw new Error('Missing input');
+  const cart = await User.findById(_id).select('cart');
+  const alreadyProd = cart?.cart.find(p=>p.product.toString() === pid);
+  if(alreadyProd) {
+    if(alreadyProd.color === color) {
+      const respone = await User.updateOne({cart: {$elemMatch:alreadyProd}}, {$set: { 'cart.$.quantity': quantity } }, {new: true}).select('-password -refreshToken -role');
+      return res.status(200).json({
+        success: respone ? true : false,
+        cart: respone ? respone : 'No user update'
+      })
+    }else {
+      const respone = await User.findByIdAndUpdate(_id, {$push: { cart: { product: pid, quantity, color } } }, {new: true}).select('-password -refreshToken -role');
+      return res.status(200).json({
+        success: respone ? true : false,
+        cart: respone ? respone : 'No user update'
+      })
+    }
+  }else{
+    const respone = await User.findByIdAndUpdate(_id, {$push: { cart: { product: pid, quantity, color } } }, {new: true}).select('-password -refreshToken -role');
+    return res.status(200).json({
+      success: respone ? true : false,
+      cart: respone ? respone : 'No user update'
+    })
+  }
+})
+
 module.exports = {
     registerUser,
     loginUser,
@@ -188,5 +227,7 @@ module.exports = {
     getUsers,
     deleteUser,
     updateUser,
-    updateUserByAdmin
+    updateUserByAdmin,
+    updateUserAdress,
+    updateCart
 };

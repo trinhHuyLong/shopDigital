@@ -13,8 +13,12 @@ var productSchema = new mongoose.Schema({
         unique:true,
         lowercase:true,
     },
-    description:{
+    thumb:{
         type:String,
+        required:true,
+    },
+    description:{
+        type:Array,
         required:true,
     },
     brand:{
@@ -26,8 +30,8 @@ var productSchema = new mongoose.Schema({
         required:true,
     },
     category:{
-        type:mongoose.Types.ObjectId,
-        ref:'Category',
+        type: String,
+        required:true,
     },
     quantity:{
         type:Number,
@@ -37,12 +41,12 @@ var productSchema = new mongoose.Schema({
         type:Number,
         default:0,
     },
-    image:{
+    images:{
         type:Array,
     },
-    coler:{
-        type:Number,
-        enum:['black','brown','silver','white','blue'],
+    color:{
+        type:String,
+        // required:true,
     },
     ratings:[
         {
