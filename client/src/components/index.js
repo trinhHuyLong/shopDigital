@@ -5,3 +5,10 @@ export {default as Sidebar} from './sidebar';
 export {default as BestSeller} from './bestseller';
 export {default as Product} from './product';
 export {default as Selection} from './selection';
+export {default as DealDaily} from './dealdaily';
+export {default as CountDown} from './countdown';
+export {default as FeatureProducts} from './featureProducts';
+export {default as ProductCard} from './productcard';
+export {default as CustomSlider} from './customslider';
+export {default as TopHeader} from './topheader'
+export {default as Footer} from './footer'

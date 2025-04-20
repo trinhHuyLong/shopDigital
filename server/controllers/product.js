@@ -36,7 +36,7 @@ const getProducts = asyncHandler(async (req, res) => {
         const sortBy = req.query.sort.split(',').join(' ');
         queryCommand = queryCommand.sort(sortBy);
     } else {
-        queryCommand = queryCommand.sort('-createdAt'); // Mặc định sắp xếp theo ngày tạo
+        queryCommand = queryCommand.sort('-_id'); // Mặc định sắp xếp theo ngày tạo
     }
 
     if (req.query.fields) {

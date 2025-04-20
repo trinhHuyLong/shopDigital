@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { FaHeart } from "react-icons/fa";
 import { TiThMenu } from "react-icons/ti";
 import { IoEye } from "react-icons/io5";
+import { Link } from 'react-router-dom';
 
 import {formatMoney } from '../utils/helper'
 import label1 from '../assets/lable2.png'
@@ -12,7 +13,7 @@ import {Selection} from '../components'
 const Product = ({product, isNew}) => {
     const [isShow, setIsShow] = useState(false)
 
-    return <div className="w-full text-base px-[10px]">
+    return <Link className="w-full text-base px-[10px]" to={`/product/${product._id}/${product.title}`}>
         <div className="w-full border p-[15px] flex flex-col items-center" onMouseEnter={() => setIsShow(true)} onMouseLeave={() => setIsShow(false)}>
             <div className='w-full relative flex justify-center'>
                 {
@@ -50,7 +51,7 @@ const Product = ({product, isNew}) => {
                 <span>{`${formatMoney(product.price)} VND`}</span>
             </div>
         </div>
-    </div>
+    </Link>
 }
 
 export default Product;

@@ -1,3 +1,10 @@
 export {default as Home} from './home';
 export {default as Login} from './login';
 export {default as Public} from './public';
+export {default as Products} from './products';
+export {default as DetailProd} from './detailprod';
+export {default as Blogs} from './blog';
+export {default as FAQ} from './faq';
+export {default as Service} from './service';
+export {default as FinalRegister} from './finalregister'
+export {default as ResetPassword} from './resetpassword'

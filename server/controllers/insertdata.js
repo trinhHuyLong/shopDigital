@@ -2,8 +2,10 @@ const asyncHandler = require('express-async-handler')
 const slugify = require('slugify')
 
 const Product = require('../models/product')
+const Brand = require('../models/productCategory')
 
 const data = require('../data.json')
+const data2 = require('../prodcate')
 
 const fn = async (product) => {
     try{
@@ -27,6 +29,18 @@ const fn = async (product) => {
     
 }
 
+const fn2 = async (p) => {
+    try{
+        await Brand.create({
+            title: p.cate,
+            brand: p.brand,
+            image: p.image
+        })
+    } catch(error) {
+        console.log('Error:', error)
+    }
+    
+}
 const insertProduct = asyncHandler(async (req, res) => {
     const promises = []
     for(let product of data) {
@@ -36,6 +50,16 @@ const insertProduct = asyncHandler(async (req, res) => {
     return res.json('Done')
 })
 
+const insertBrand = asyncHandler(async (req, res) => {
+    const promises = []
+    for(let brand of data2) {
+        promises.push(fn2(brand))
+    }
+    await Promise.all(promises)
+    return res.json('Done')
+})
+
 module.exports = {
-    insertProduct
+    insertProduct,
+    insertBrand
 }

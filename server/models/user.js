@@ -4,11 +4,7 @@ const crypto = require('crypto-js');
 
 // Declare the Schema of the Mongo model
 var userSchema = new mongoose.Schema({
-    firstname:{
-        type:String,
-        required:true
-    },
-    lastname:{
+    name:{
         type:String,
         required:true
     },
@@ -18,9 +14,7 @@ var userSchema = new mongoose.Schema({
         unique:true,
     },
     mobile:{
-        type:String,
-        required:true,
-        unique:true,
+        type:String
     },
     password:{
         type:String,
@@ -58,6 +52,9 @@ var userSchema = new mongoose.Schema({
     passwordResetExpires: {
         type: String,
     },
+    registerToken: {
+        type: String
+    }
 },{timestamps:true});
 
 userSchema.pre('save', async function(next) {

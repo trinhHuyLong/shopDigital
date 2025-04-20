@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const instance = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
+    withCredentials:true
 });
 
 instance.interceptors.request.use(function (config) {
@@ -13,7 +14,7 @@ instance.interceptors.request.use(function (config) {
 instance.interceptors.response.use(function (response) {
     return response.data;
 }, function (error) {
-    return error.data;
+    return error.response.data;
 });
 
 export default instance;

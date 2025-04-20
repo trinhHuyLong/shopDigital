@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import * as apis from '../apis';
+import * as apis from '../../apis';
 
 export const getCategories = createAsyncThunk(
     'app/categories',
@@ -9,7 +9,7 @@ export const getCategories = createAsyncThunk(
             if (!response.success) {
                 return rejectWithValue(response); // Sử dụng rejectWithValue
             }
-            return response.prodCategory            ;
+            return response.prodCategory;
         } catch (error) {
             return rejectWithValue(error.response?.data || { message: 'Something went wrong' });
         }
