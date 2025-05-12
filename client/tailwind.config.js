@@ -6,6 +6,9 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx}",  // Đảm bảo Tailwind tìm kiếm tất cả các file trong thư mục src
   ],
   theme: {
+    listStyleType: {
+      square:"square"
+    },
     extend: {
       fontFamily: {
         main: ["Poppins", "sans-serif"], // Sử dụng font Poppins
@@ -17,7 +20,8 @@ module.exports = {
         main: '#ee3131'
       },
       colors: {
-        main: '#ee3131'
+        main: '#ee3131',
+        transparent:'rgba(0, 0, 0, 0.5)'
       },
       flex: {
         '2': '2 2 0%',

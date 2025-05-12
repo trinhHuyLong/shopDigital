@@ -1,6 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 import * as actions from './asyncAction';
-
 
 export const appSlice = createSlice({
     name: 'app',
@@ -8,14 +7,20 @@ export const appSlice = createSlice({
         categories: null,
         isLoading: false,
         errorMessage: null,
+        isShowModal: false,
+        modalChildren: null,
     },
     reducers: {
-        logout: (state) => {
+        logout: state => {
             state.isLoading = false;
-        }
+        },
+        showModal: (state, action) => {
+            state.isShowModal = action.payload.isShowModal;
+            state.modalChildren = action.payload.modalChildren;
+        },
     },
-    extraReducers: (builder) => {
-        builder.addCase(actions.getCategories.pending, (state) => {
+    extraReducers: builder => {
+        builder.addCase(actions.getCategories.pending, state => {
             state.isLoading = true;
         });
 
@@ -24,12 +29,12 @@ export const appSlice = createSlice({
             state.categories = action.payload;
         });
 
-        builder.addCase(actions.getCategories.rejected, (state,action) => {
+        builder.addCase(actions.getCategories.rejected, (state, action) => {
             state.isLoading = false;
             state.errorMessage = action.payload.message;
         });
-    }
-})
+    },
+});
 
-export const { logout } = appSlice.actions;
+export const { logout, showModal } = appSlice.actions;
 export default appSlice.reducer;

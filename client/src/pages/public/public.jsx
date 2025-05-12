@@ -9,7 +9,7 @@ function Public() {
       <TopHeader/>
       <Header/>
       <Navigation/>
-      <div className='w-main'>
+      <div className='w-full flex justify-center'>
         <Outlet />
       </div>
       <Footer/>

@@ -3,13 +3,26 @@ export const path = {
     HOME: '',
     ALL: '*',
     LOGIN: 'login',
-    PRODUCTS: 'products',
+    PRODUCTS: ':category',
     BLOGS: 'blogs',
     OUR_SERVICES: 'services',
     FAQ: 'faq',
-    DETAIL_PROD: 'product/:id/:title',
-    FINALREGISTER:'finalregister/:status',
-    RESETPASSWORD:'reset-password/:token'
-  };
+    DETAIL_PROD: ':category/:id/:title',
+    FINALREGISTER: 'finalregister/:status',
+    RESETPASSWORD: 'reset-password/:token',
+
+    //Admin
+
+    ADMIN: 'admin',
+    DASHBOARD: 'dashboard',
+    MANAGE_USERS: 'manage-users',
+    MANAGE_PRODUCTS: 'manage-products',
+    MANAGE_ORDERS: 'manage-orders',
+    CREATE_PRODUCT: 'create-product',
+
+    //Member
+    MEMBER: 'member',
+    PERSIONAL: 'personal',
+};
 
 export default path;

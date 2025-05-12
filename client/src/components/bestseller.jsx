@@ -10,7 +10,7 @@ const tabs = [
 ]
 
 
-const BestSeller = () => {
+const BestSeller = ({bestSeller,newProducts}) => {
     const [activeTab, setActiveTab] = useState(0);
 
     
@@ -27,7 +27,7 @@ const BestSeller = () => {
             </div>
         </div>
         <div className='mt-4 mx-[-10px]'>  
-            <CustomSlider activeTab={activeTab} />
+            <CustomSlider type={activeTab===0?'best':'new'} products={activeTab===0?bestSeller:newProducts}/>
         </div>
         <div className='w-full flex gap-4 mt-4'>
             <img src={b1} alt="" className='flex-1 object-contain'/>
