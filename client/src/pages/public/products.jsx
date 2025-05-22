@@ -1,9 +1,9 @@
 import { useParams, useSearchParams, useNavigate, createSearchParams } from 'react-router-dom';
-import { Breadcrumbs, SearchItem, SelectElement, Pagination } from '../../components';
-import { apiGetProducts } from '../../apis/product';
+import { Breadcrumbs, SearchItem, SelectElement, Pagination } from '../../components/index.js';
+import { apiGetProducts } from '../../apis/product.js';
 import { useCallback, useEffect, useState } from 'react';
 
-import { Product } from '../../components';
+import { Product } from '../../components/index.js';
 import { sorts } from '../../utils/constants.jsx';
 
 const Products = () => {
@@ -61,9 +61,9 @@ const Products = () => {
             delete queries.to;
         }
         if (category === ':category') {
-            fetchProductByCategory({ ...priceQuery, ...queries, limit: 10 });
+            fetchProductByCategory({ ...priceQuery, ...queries, limit: 12 });
         } else {
-            fetchProductByCategory({ ...priceQuery, ...queries, category, limit: 10 });
+            fetchProductByCategory({ ...priceQuery, ...queries, category, limit: 12 });
         }
         window.scrollTo(0, 0);
     }, [params]);
@@ -72,8 +72,10 @@ const Products = () => {
         <div className="w-full">
             <div className="h-[81px] flex justify-center items-center bg-gray-100">
                 <div className="w-main">
-                    <h3 className="font-semibold uppercase">{category}</h3>
-                    <Breadcrumbs category={category} />
+                    <h3 className="font-semibold uppercase">
+                        {category === ':category' ? 'products' : category}
+                    </h3>
+                    <Breadcrumbs category={category === ':category' ? 'products' : category} />
                 </div>
             </div>
             <div className="border w-main p-4 flex justify-between mt-8 m-auto">
@@ -108,12 +110,10 @@ const Products = () => {
                 </div>
             </div>
             {products?.counts / 10 > 1 && (
-                <div className="w-main m-auto my-4 flex justify-end">
+                <div className="w-main m-auto my-4 flex justify-center">
                     <Pagination totalCount={products?.counts} />
                 </div>
             )}
-
-            <div className="w-full h-[500px]"></div>
         </div>
     );
 };

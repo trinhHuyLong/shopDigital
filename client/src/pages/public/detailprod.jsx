@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState, useCallback } from 'react';
 import Slider from 'react-slick';
 import { FaShieldAlt, FaReply, FaTruck, FaTty } from 'react-icons/fa';
@@ -10,6 +10,13 @@ import { apiGetProduct, apiGetProducts } from '../../apis/product';
 import { Breadcrumbs, ProductIcon, ProductInfor, CustomSlider } from '../../components';
 import { formatMoney, formatNumber } from '../../utils/helper';
 import renderStar from '../../utils/rederStar';
+import { apiUpdateCart } from '../../apis';
+import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCurrent } from '../../redux/user/asyncAction';
+import { current } from '@reduxjs/toolkit';
+import Swal from 'sweetalert2';
+import path from '../../utils/path';
 
 const settings = {
     dots: false,
@@ -53,11 +60,14 @@ const productIconData = [
 ];
 
 const DetailProd = () => {
+    const { current } = useSelector(state => state.user);
     const [product, setProduct] = useState(null);
     const [products, setProducts] = useState(null);
     const [quantity, setQuantity] = useState('');
     const { id, title, category } = useParams();
     const [currentImg, setCurrentImg] = useState(null);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const fetchProductData = async id => {
         const response = await apiGetProduct(id);
@@ -74,9 +84,36 @@ const DetailProd = () => {
         }
     };
 
+    const handleAddCart = async () => {
+        if (!current) {
+            return Swal.fire({
+                title: 'Almost....',
+                text: 'Please login first!',
+                icon: 'info',
+                cancelButtonText: 'Not now',
+                showCancelButton: true,
+                confirmButtonText: 'Go login page',
+            }).then(async rs => {
+                if (rs.isConfirmed) navigate(`${path.LOGIN}`);
+            });
+        }
+        if (!quantity) {
+            toast.info('Please set quantity');
+        } else {
+            const response = await apiUpdateCart({
+                pid: product._id,
+                color: product.color,
+                quantity,
+            });
+            if (response.success) {
+                toast.success('Upadate cart success');
+                dispatch(getCurrent());
+            } else toast.error('fail');
+        }
+    };
+
     const handleChangeImg = e => {
         setCurrentImg(e.target.src);
-        console.log(1);
     };
 
     const handleQuantity = useCallback(
@@ -160,7 +197,7 @@ const DetailProd = () => {
                             ))}
                         {product?.description.length === 1 && (
                             <div
-                                className="text-sm"
+                                className="text-sm line-clamp-[10] mb-8"
                                 dangerouslySetInnerHTML={{
                                     __html: DOMPurify.sanitize(product?.description[0]),
                                 }}
@@ -172,7 +209,12 @@ const DetailProd = () => {
                             <span className="font-semiboldf">Quantity:</span>
                             <SelectQuantity quantity={quantity} handleQuantity={handleQuantity} />
                         </div>
-                        <button className="w-full bg-main text-gray-100 py-2">Add to cart</button>
+                        <button
+                            onClick={() => handleAddCart()}
+                            className="w-full bg-main text-gray-100 py-2"
+                        >
+                            Add to cart
+                        </button>
                     </div>
                 </div>
                 <div className=" w-[20%]">
@@ -195,12 +237,11 @@ const DetailProd = () => {
                     Other Customers also buy:
                 </h3>
                 {products && (
-                    <div className="mt-4 mx-[-10px]">
+                    <div className="mt-4 mx-[-10px] mb-8">
                         <CustomSlider products={products} />
                     </div>
                 )}
             </div>
-            <div className="h-[500px] w-full"></div>
         </div>
     );
 };

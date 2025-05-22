@@ -14,7 +14,15 @@ router.post(
     ]),
     productController.createProduct
 );
-router.put('/update/:pid', [verifyAccessToken, isAdmin], productController.updateProduct);
+router.put(
+    '/update/:pid',
+    [verifyAccessToken, isAdmin],
+    uploader.fields([
+        { name: 'images', maxCount: 10 },
+        { name: 'thumb', maxCount: 1 },
+    ]),
+    productController.updateProduct
+);
 router.put(
     '/uploadImage/:pid',
     [verifyAccessToken, isAdmin],

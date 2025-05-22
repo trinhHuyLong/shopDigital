@@ -31,3 +31,5 @@ export { default as Inputfield } from './inputfield';
 export { default as InputForm } from './InputForm';
 export { default as Select } from './Select';
 export { default as MarkdownEditor } from './MarkdownEditor';
+export { default as MemberSideBar } from './MemberSideBar';
+export { default as Cart } from './Cart';

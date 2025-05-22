@@ -59,3 +59,22 @@ export const apiDeleteUser = uid =>
         url: 'user/' + uid,
         method: 'delete',
     });
+
+export const apiUpdateCurrent = data =>
+    axios({
+        url: 'user/update',
+        method: 'put',
+        data,
+    });
+
+export const apiUpdateCart = data =>
+    axios({
+        url: 'user/updatecart',
+        method: 'put',
+        data,
+    });
+export const apiRemoveCart = pid =>
+    axios({
+        url: 'user/remove-cart/' + pid,
+        method: 'delete',
+    });

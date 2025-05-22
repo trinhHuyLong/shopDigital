@@ -1,6 +1,8 @@
 import React from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+
+import { MemberSideBar } from '../../components';
 import path from '../../utils/path';
 
 const MemberLayout = () => {
@@ -9,9 +11,14 @@ const MemberLayout = () => {
         return <Navigate to={`/${path.LOGIN}`} />;
     }
     return (
-        <div>
-            Member Layout
-            <Outlet />
+        <div className="flex w-full bg-white min-h-screen">
+            <div className="w-[327px] flex-none fixed top-0 bottom-0">
+                <MemberSideBar />
+            </div>
+            <div className="w-[327px]"></div>
+            <div className="flex-auto">
+                <Outlet />
+            </div>
         </div>
     );
 };

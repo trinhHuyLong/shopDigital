@@ -19,6 +19,7 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
+    const [confirm, setConfirm] = useState('');
     const [token, setToken] = useState('');
     const [isRegister, setIsRegister] = useState(false);
     const [isForgotPassword, setIsForgotPassword] = useState(false);
@@ -38,6 +39,7 @@ const Login = () => {
         setEmail('');
         setName('');
         setPassword('');
+        setConfirm('');
     };
 
     useEffect(() => {
@@ -45,9 +47,17 @@ const Login = () => {
     }, [isRegister]);
 
     const handleSubmit = async e => {
-        const payload = isRegister ? { name, email, password } : { email, password };
+        const payload = isRegister ? { name, email, password, confirm } : { email, password };
 
-        const invalids = validate(payload, setInvalideFiedls);
+        let invalids = validate(payload, setInvalideFiedls);
+
+        if (isRegister && confirm !== password) {
+            invalids++;
+            setInvalideFiedls(prev => [
+                ...prev,
+                { name: 'confirm', mes: 'Confirm password incorrect' },
+            ]);
+        }
 
         const data = { email, password };
         if (invalids == 0) {
@@ -179,6 +189,18 @@ const Login = () => {
                                 setInvalideFiedls={setInvalideFiedls}
                             />
                         </div>
+                        {isRegister && (
+                            <div className="mb-3">
+                                <InputField
+                                    value={confirm}
+                                    setValue={setConfirm}
+                                    nameKey={'Confirm password'}
+                                    invalidFields={invalidFields}
+                                    setInvalideFiedls={setInvalideFiedls}
+                                    type="password"
+                                />
+                            </div>
+                        )}
                         <button
                             onClick={handleSubmit}
                             className="w-full bg-main text-white mt-5 py-2 rounded-md"
@@ -199,28 +221,44 @@ const Login = () => {
                                     Forgot your account?
                                 </span>
                                 <span
-                                    onClick={() => setIsRegister(true)}
+                                    onClick={() => {
+                                        setIsRegister(true);
+                                        resetData();
+                                    }}
                                     className="text-main hover:underline hover:cursor-pointer"
                                 >
-                                    create an account
+                                    Create an account.
                                 </span>
                             </>
                         )}
                         {isRegister && (
-                            <span
-                                onClick={() => setIsRegister(false)}
-                                className="w-full text-center text-main hover:underline hover:cursor-pointer"
-                            >
-                                go login
-                            </span>
+                            <div className="flex justify-around w-full">
+                                <Link
+                                    className="text-center text-main text-sm hover:underline hover:cursor-pointer"
+                                    to={`/${path.HOME}`}
+                                >
+                                    Go home.
+                                </Link>
+                                <span
+                                    onClick={() => {
+                                        setIsRegister(false);
+                                        resetData();
+                                    }}
+                                    className="text-center text-main hover:underline hover:cursor-pointer"
+                                >
+                                    Go login.
+                                </span>
+                            </div>
                         )}
                     </div>
-                    <Link
-                        className="text-center text-main text-sm hover:underline hover:cursor-pointer"
-                        to={`/${path.HOME}`}
-                    >
-                        Go home.
-                    </Link>
+                    {!isRegister && (
+                        <Link
+                            className="text-center text-main text-sm hover:underline hover:cursor-pointer"
+                            to={`/${path.HOME}`}
+                        >
+                            Go home.
+                        </Link>
+                    )}
                 </div>
             </div>
         </div>

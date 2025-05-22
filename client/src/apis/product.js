@@ -26,3 +26,16 @@ export const apiCreateProduct = async data =>
         url: '/product/',
         data,
     });
+
+export const apiUpdateProduct = async (data, pid) =>
+    axios({
+        method: 'PUT',
+        url: '/product/update/' + pid,
+        data,
+    });
+
+export const apiDeleteProduct = async pid =>
+    axios({
+        method: 'DELETE',
+        url: '/product/' + pid,
+    });

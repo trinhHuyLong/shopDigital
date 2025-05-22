@@ -27,12 +27,15 @@ const InputField = ({
                 onFocus={() => {
                     setIsFocused(true);
                     setInvalideFiedls && setInvalideFiedls([]);
-                }} // Khi focus
-                onBlur={() => setIsFocused(false)} // Khi mất focus
+                }}
+                onBlur={() => setIsFocused(false)}
             />
-            {invalidFields?.some(el => el.name === nameKey.toLowerCase()) && (
+            {invalidFields?.some(el => el.name === nameKey.split(' ')[0]?.toLowerCase()) && (
                 <small className="text-main text-[12px] italic">
-                    {invalidFields?.find(el => el.name === nameKey.toLowerCase()).mes}{' '}
+                    {
+                        invalidFields?.find(el => el.name === nameKey.split(' ')[0].toLowerCase())
+                            ?.mes
+                    }
                 </small>
             )}
         </div>

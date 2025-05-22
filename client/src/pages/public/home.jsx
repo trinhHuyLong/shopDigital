@@ -50,14 +50,6 @@ function Home() {
             </div>
             <div className="my-8">
                 <h3 className="text-[20px] font-semibold py-[15px] border-b-2 uppercase border-main">
-                    New Arrivals
-                </h3>
-                <div className="mt-4 mx-[-10px]">
-                    <CustomSlider type={'best'} products={bestSeller} />
-                </div>
-            </div>
-            <div className="my-8">
-                <h3 className="text-[20px] font-semibold py-[15px] border-b-2 uppercase border-main">
                     HOT COLLECTIONS
                 </h3>
                 <div className="grid grid-cols-3 gap-4 my-4">
@@ -95,11 +87,6 @@ function Home() {
                         }
                     })}
                 </div>
-            </div>
-            <div className="my-8">
-                <h3 className="text-[20px] font-semibold py-[15px] border-b-2 uppercase border-main">
-                    Blog posts
-                </h3>
             </div>
         </div>
     );

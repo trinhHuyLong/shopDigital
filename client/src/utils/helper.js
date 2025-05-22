@@ -38,6 +38,15 @@ export const validate = (payload, setInvalidFields) => {
                     ]);
                 }
                 break;
+            case 'confirm':
+                if (arr[1].length < 6) {
+                    invalids++;
+                    setInvalidFields(prev => [
+                        ...prev,
+                        { name: arr[0], mes: 'Password must be at least 6 characters.' },
+                    ]);
+                }
+                break;
             default:
                 break;
         }

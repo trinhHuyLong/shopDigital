@@ -3,27 +3,29 @@ import { NavLink, Link } from 'react-router-dom';
 import { AiOutlineCaretDown, AiOutlineCaretRight } from 'react-icons/ai';
 import clsx from 'clsx';
 
-import logo from '../assets/logo.png';
-import { adminSidebar } from '../utils/constants.jsx';
+import avatar from '../assets/avatarDefault.svg';
+import { memberSidebar } from '../utils/constants.jsx';
+import { useSelector } from 'react-redux';
 
 const activeStyle = 'px-4 py-2 flex items-center gap-2  bg-main text-white';
 const notActiveStyle =
     'px-4 py-2 flex items-center gap-2  hover:bg-main hover:opacity-80 hover:text-white';
 
-const SidebarAdmin = () => {
+const MemberSideBar = () => {
     const [open, setOpen] = useState(false);
+    const { current } = useSelector(state => state.user);
     return (
-        <div className="bg-white h-full py-4 font-sm">
+        <div className="bg-gray-100 h-full py-4 font-sm">
             <div className="flex flex-col items-center justify-center gap-2 py-4">
-                <Link to="/">
-                    <img src={logo} alt="" className="w-[200px] object-contain" />
+                <div to="/" className="w-full flex items-center py-4 flex-col justify-center">
+                    <img src={current.avatar || avatar} alt="" className="w-16 h-16 object-cover" />
                     <div className="flex justify-center pt-2">
-                        <small>Admin workspace</small>
+                        <small>{current.name}</small>
                     </div>
-                </Link>
+                </div>
             </div>
             <div>
-                {adminSidebar.map(item => (
+                {memberSidebar.map(item => (
                     <Fragment key={item.id}>
                         {item.type === 'single' && (
                             <NavLink
@@ -75,4 +77,4 @@ const SidebarAdmin = () => {
     );
 };
 
-export default SidebarAdmin;
+export default MemberSideBar;

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { FaHeart } from 'react-icons/fa';
 import { TiThMenu } from 'react-icons/ti';
 import { IoEye } from 'react-icons/io5';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { formatMoney } from '../utils/helper';
 import label1 from '../assets/lable2.png';
@@ -12,28 +12,25 @@ import { Selection } from '../components';
 
 const Product = ({ product, type }) => {
     const [isShow, setIsShow] = useState(false);
+    const navigate = useNavigate();
 
     return (
         <Link to={`/${product?.category?.toLowerCase()}/${product._id}/${product.title}`}>
             <div className="w-full text-base px-[10px] py-[8px]">
                 <div
-                    className="w-full border p-[15px] flex flex-col items-center"
+                    className="w-full border p-[15px] flex flex-col items-center relative"
                     onMouseEnter={() => setIsShow(true)}
                     onMouseLeave={() => setIsShow(false)}
                 >
-                    <div className="w-full relative flex justify-center">
+                    <div className="w-full  flex justify-center">
                         {isShow && (
-                            <div className="absolute bottom-[-10px] left-0 right-0 flex justify-center gap-2 animate-slide-top">
-                                <Selection icon={<IoEye />} />
-                                <Selection icon={<TiThMenu />} />
-                                <Selection icon={<FaHeart />} />
-                            </div>
+                            <div className="absolute inset-0 bg-transparent1 flex justify-center gap-2 animate-slide-fwd-center"></div>
                         )}
                         {type && (
                             <img
                                 src={type === 'new' ? label1 : label2}
                                 alt="label"
-                                className="absolute top-[-16px] left-[-28px] w-[84px] h-[25px] object-cover"
+                                className="absolute top-[0px] left-[-12px] w-[84px] h-[25px] object-cover"
                             />
                         )}
                         <img
@@ -48,11 +45,11 @@ const Product = ({ product, type }) => {
                         {type && (
                             <>
                                 {type === 'new' ? (
-                                    <span className="absolute top-[-16px] left-[0px] text-white text-center text-[12px] font-semibold leading-[25px]">
+                                    <span className="absolute top-[-3px] left-[12px] text-white text-center text-[12px] font-semibold leading-[25px]">
                                         New
                                     </span>
                                 ) : (
-                                    <span className="absolute top-[-16px] left-[0px] text-white text-center text-[12px] font-semibold leading-[25px]">
+                                    <span className="absolute top-[-3px] left-[12px] text-white text-center text-[12px] font-semibold leading-[25px]">
                                         Hot
                                     </span>
                                 )}

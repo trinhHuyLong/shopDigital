@@ -38,7 +38,6 @@ const ProductInfor = ({ totalRating, ratings, nameProduct, productId, handleSubm
         }
     };
     const handleVote = async (star, comment) => {
-        console.log(star, comment);
         if (!star || !productId || !comment) {
             alert('Please fill all fields!');
             return;
@@ -114,7 +113,7 @@ const ProductInfor = ({ totalRating, ratings, nameProduct, productId, handleSubm
                     {ratings?.map((item, index) => (
                         <Comment
                             key={index}
-                            image={item?.user?.avatar}
+                            image={item?.postedBy?.avatar}
                             createdAt={item?.updateAt}
                             comment={item?.comment}
                             star={item?.star}

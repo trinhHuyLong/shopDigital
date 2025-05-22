@@ -8,6 +8,7 @@ export const appSlice = createSlice({
         isLoading: false,
         errorMessage: null,
         isShowModal: false,
+        isShowCart: false,
         modalChildren: null,
     },
     reducers: {
@@ -17,6 +18,11 @@ export const appSlice = createSlice({
         showModal: (state, action) => {
             state.isShowModal = action.payload.isShowModal;
             state.modalChildren = action.payload.modalChildren;
+        },
+
+        showCart: (state, action) => {
+            console.log(action);
+            state.isShowCart = state.isShowCart ? false : true;
         },
     },
     extraReducers: builder => {
@@ -36,5 +42,5 @@ export const appSlice = createSlice({
     },
 });
 
-export const { logout, showModal } = appSlice.actions;
+export const { logout, showModal, showCart } = appSlice.actions;
 export default appSlice.reducer;

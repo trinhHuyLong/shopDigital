@@ -195,3 +195,34 @@ export const adminSidebar = [
         icon: <RiBillLine size={20} />,
     },
 ];
+
+export const memberSidebar = [
+    {
+        id: 1,
+        type: 'single',
+        text: 'Persional',
+        path: `/${path.MEMBER}/${path.PERSIONAL}`,
+        icon: <AiFillDashboard size={20} />,
+    },
+    {
+        id: 2,
+        type: 'single',
+        text: 'My cart',
+        path: `/${path.MEMBER}/${path.MY_CART}`,
+        icon: <MdGroup size={20} />,
+    },
+    {
+        id: 3,
+        type: 'single',
+        text: 'Buy history',
+        path: `/${path.MEMBER}/${path.HISTORY}`,
+        icon: <RiBillLine size={20} />,
+    },
+    {
+        id: 4,
+        type: 'single',
+        text: 'Wishlist',
+        path: `/${path.MEMBER}/${path.WISHLIST}`,
+        icon: <RiBillLine size={20} />,
+    },
+];

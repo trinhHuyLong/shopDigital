@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { ToastContainer } from 'react-toastify';
-import { Modal } from './components';
+import { Modal, Cart } from './components';
 import 'react-toastify/dist/ReactToastify.css';
 
 import {
@@ -27,12 +27,13 @@ import {
     ManageUser,
     ManageProduct,
 } from './pages/private';
-import { Persional, MemberLayout } from './pages/member';
+import { Persional, MemberLayout, History, MyCart, WishList, DetailCart } from './pages/member';
 import path from './utils/path';
 import { getCategories } from './redux/app/asyncAction';
+import { showCart } from './redux/app/appSlice';
 
 function App() {
-    const { isShowModal, modalChildren } = useSelector(state => state.app);
+    const { isShowModal, modalChildren, isShowCart } = useSelector(state => state.app);
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(getCategories());
@@ -40,6 +41,14 @@ function App() {
 
     return (
         <div className="font-main relative">
+            {isShowCart && (
+                <div
+                    onClick={() => dispatch(showCart())}
+                    className="absolute inset-0 bg-transparent z-50 flex justify-end"
+                >
+                    <Cart />
+                </div>
+            )}
             {isShowModal && <Modal>{modalChildren}</Modal>}
             <ToastContainer />
             <Routes>
@@ -51,6 +60,7 @@ function App() {
                     <Route path={path.FAQ} element={<FAQ />} />
                     <Route path={path.RESETPASSWORD} element={<ResetPassword />} />
                     <Route path={path.PRODUCTS} element={<Products />} />
+                    <Route path={path.DETAIL_CART} element={<DetailCart />} />
                     <Route path={path.ALL} element={<Home />} />
                 </Route>
                 <Route path={path.ADMIN} element={<AdminLayout />}>
@@ -62,6 +72,9 @@ function App() {
                 </Route>
                 <Route path={path.MEMBER} element={<MemberLayout />}>
                     <Route path={path.PERSIONAL} element={<Persional />} />
+                    <Route path={path.MY_CART} element={<DetailCart />} />
+                    <Route path={path.HISTORY} element={<History />} />
+                    <Route path={path.WISHLIST} element={<WishList />} />
                 </Route>
                 <Route path={path.LOGIN} element={<Login />} />
                 <Route path={path.FINALREGISTER} element={<FinalRegister />} />

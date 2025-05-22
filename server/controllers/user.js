@@ -2,11 +2,9 @@ const asyncHandler = require('express-async-handler');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const crypto = require('crypto-js');
-const makeToken = require('uniqid');
 
 const sendMail = require('../ultils/sendMail');
-const { generateAccessToken, generateRefreshToken } = require('../middlewares/jwt');
-const { response } = require('express');
+const { generateAccessToken } = require('../middlewares/jwt');
 
 const registerUser = asyncHandler(async (req, res) => {
     const { name, email, password } = req.body;
@@ -20,8 +18,8 @@ const registerUser = asyncHandler(async (req, res) => {
     if (user) {
         throw new Error('User already exists');
     } else {
-        const token = makeToken();
-        const emailCheck = btoa(email) + '@' + token;
+        const token = Math.floor(100000 + Math.random() * 900000).toString();
+        const emailCheck = btoa(email) + '@' + btoa(token);
         const newUser = User.create({
             email: emailCheck,
             name,
@@ -29,7 +27,21 @@ const registerUser = asyncHandler(async (req, res) => {
         });
 
         if (newUser) {
-            const html = `<h2>Register code:</h2><br/><blockquote>${token}</blockquote>`;
+            const html = `<h2>Hello ${name}</h2><br/>
+            <h3>We have received your request to create an account. Please enter this code on our Website:</h3>
+            <p style="
+            background-color: #eaf4ff;
+            border: 1px solid #007bff;
+            border-radius: 8px;
+            padding: 16px 32px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 24px;
+            letter-spacing: 8px;
+            display: inline-block;
+            ">
+            ${token}
+            </p>`;
             await sendMail({ email, html, subject: 'confirm register new account' });
         }
 
@@ -47,9 +59,8 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 const finalregister = asyncHandler(async (req, res) => {
-    // const cookie = req.cookiess
     const { token } = req.params;
-    const notActiveEmail = await User.findOne({ email: new RegExp(`${token}$`) });
+    const notActiveEmail = await User.findOne({ email: new RegExp(`${btoa(token)}$`) });
     if (notActiveEmail) {
         notActiveEmail.email = atob(notActiveEmail.email.split('@')[0]);
         notActiveEmail.save();
@@ -60,15 +71,6 @@ const finalregister = asyncHandler(async (req, res) => {
             ? 'Register is successfully. Go login'
             : 'Some things wents wrong. Try again! ',
     });
-    // if (!cookie || cookie?.dataregister?.token !== token) {
-    //   res.clearCookie('dataregister')
-    //   return res.redirect(`${process.env.CLIENT_URL}/finalregister/failed`)
-    // }
-    // const { email, name, password } = cookie.dataregister
-    // const response = await User.create({ email, name, password });
-    // res.clearCookie('dataregister')
-    // if(response) return res.redirect(`${process.env.CLIENT_URL}/finalregister/successed`)
-    // else return res.redirect(`${process.env.CLIENT_URL}/finalregister/failed`)
 });
 
 const loginUser = asyncHandler(async (req, res) => {
@@ -82,15 +84,8 @@ const loginUser = asyncHandler(async (req, res) => {
     const user = await User.findOne({ email });
 
     if (user && (await user.isCorrectPassword(password))) {
-        const { password, role, refreshToken, ...userData } = user.toObject();
+        const { password, role, ...userData } = user.toObject();
         const accessToken = generateAccessToken(user._id, role);
-        const newRefreshToken = generateRefreshToken(user._id);
-        await User.findByIdAndUpdate(user._id, { newRefreshToken }, { new: true });
-
-        res.cookie('refreshToken', newRefreshToken, {
-            httpOnly: true,
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-        });
 
         return res.status(200).json({
             accessToken,
@@ -107,41 +102,18 @@ const loginUser = asyncHandler(async (req, res) => {
 
 const getCurrent = asyncHandler(async (req, res) => {
     const { _id } = req.user;
-    const user = await User.findById(_id).select('-password -refreshToken');
+    const user = await User.findById(_id)
+        .select('-password ')
+        .populate({
+            path: 'cart',
+            populate: {
+                path: 'product',
+                select: 'title thumb price color',
+            },
+        });
     return res.status(200).json({
         success: true,
         data: user,
-    });
-});
-
-const refreshToken = asyncHandler(async (req, res) => {
-    const cookies = req.cookies;
-    const refreshedToken = cookies.refreshToken;
-    if (!cookies && !refreshedToken) throw new Error('No refresh token');
-    const user = await jwt.verify(refreshedToken, process.env.SECRET_KEY);
-    const respone = await User.findOne({ _id: user._id, refreshToken: refreshedToken });
-
-    return res.status(200).json({
-        success: respone ? true : false,
-        accessToken: respone
-            ? generateAccessToken(respone._id, respone.role)
-            : 'Refresh token not matching',
-    });
-});
-
-const logout = asyncHandler(async (req, res) => {
-    const cookies = req.cookies;
-    if (!cookies || !cookies.refreshToken) throw new Error('No cookies');
-    await User.findOneAndUpdate(
-        { refreshToken: cookies.refreshToken },
-        { refreshToken: '' },
-        { new: true }
-    );
-
-    res.clearCookie('refreshToken', { path: '/', httpOnly: true, maxAge: 0 });
-    res.status(200).json({
-        success: true,
-        message: 'Logged out successfully',
     });
 });
 
@@ -259,12 +231,13 @@ const deleteUser = asyncHandler(async (req, res) => {
 const updateUser = asyncHandler(async (req, res) => {
     const { _id } = req.user;
     if (!_id || Object.keys(req.body).length === 0) throw new Error('Please provide an id');
-    const user = await User.findByIdAndUpdate(_id, req.body, { new: true }).select(
-        '-password -refreshToken -role'
-    );
+    const { name, email, mobile } = req.body;
+    const data = { name, email, mobile };
+    if (req.file) data.avatar = req.file.path;
+    const user = await User.findByIdAndUpdate(_id, data, { new: true }).select('-password -role');
     return res.status(200).json({
         success: user ? true : false,
-        deleteUsers: user ? user : 'No user update',
+        mes: user ? 'update success' : 'update fail',
     });
 });
 
@@ -272,7 +245,7 @@ const updateUserByAdmin = asyncHandler(async (req, res) => {
     const { uid } = req.params;
     if (Object.keys(req.body).length === 0) throw new Error('Missing input');
     const user = await User.findByIdAndUpdate(uid, req.body, { new: true }).select(
-        '-password -refreshToken -role'
+        '-password -role'
     );
     return res.status(200).json({
         success: user ? true : false,
@@ -287,7 +260,7 @@ const updateUserAdress = asyncHandler(async (req, res) => {
         _id,
         { $push: { address: req.body.address } },
         { new: true }
-    ).select('-password -refreshToken -role');
+    ).select('-password -role');
     return res.status(200).json({
         success: user ? true : false,
         deleteUsers: user ? user : 'No user update',
@@ -296,38 +269,26 @@ const updateUserAdress = asyncHandler(async (req, res) => {
 
 const updateCart = asyncHandler(async (req, res) => {
     const { _id } = req.user;
-    const { pid, quantity, color } = req.body;
-    if (!pid || !quantity || !color) throw new Error('Missing input');
+    const { pid, quantity = 1, color } = req.body;
+    if (!pid) throw new Error('Missing input');
     const cart = await User.findById(_id).select('cart');
     const alreadyProd = cart?.cart.find(p => p.product.toString() === pid);
     if (alreadyProd) {
-        if (alreadyProd.color === color) {
-            const respone = await User.updateOne(
-                { cart: { $elemMatch: alreadyProd } },
-                { $set: { 'cart.$.quantity': quantity } },
-                { new: true }
-            ).select('-password -refreshToken -role');
-            return res.status(200).json({
-                success: respone ? true : false,
-                cart: respone ? respone : 'No user update',
-            });
-        } else {
-            const respone = await User.findByIdAndUpdate(
-                _id,
-                { $push: { cart: { product: pid, quantity, color } } },
-                { new: true }
-            ).select('-password -refreshToken -role');
-            return res.status(200).json({
-                success: respone ? true : false,
-                cart: respone ? respone : 'No user update',
-            });
-        }
+        const respone = await User.updateOne(
+            { cart: { $elemMatch: alreadyProd } },
+            { $set: { 'cart.$.quantity': quantity } },
+            { new: true }
+        ).select('-password -role');
+        return res.status(200).json({
+            success: respone ? true : false,
+            cart: respone ? respone : 'No user update',
+        });
     } else {
         const respone = await User.findByIdAndUpdate(
             _id,
-            { $push: { cart: { product: pid, quantity, color } } },
+            { $push: { cart: { product: pid, quantity } } },
             { new: true }
-        ).select('-password -refreshToken -role');
+        ).select('-password -role');
         return res.status(200).json({
             success: respone ? true : false,
             cart: respone ? respone : 'No user update',
@@ -335,12 +296,32 @@ const updateCart = asyncHandler(async (req, res) => {
     }
 });
 
+const removeProductInCart = asyncHandler(async (req, res) => {
+    const { _id } = req.user;
+    const { pid } = req.params;
+    const cart = await User.findById(_id).select('cart');
+    const alreadyProd = cart?.cart.find(p => p.product.toString() === pid);
+    if (!alreadyProd) {
+        return res.status(200).json({
+            success: true,
+            cart: 'Updated your cart',
+        });
+    }
+    const respone = await User.findByIdAndUpdate(
+        _id,
+        { $pull: { cart: { product: pid } } },
+        { new: true }
+    ).select('-password -role');
+    return res.status(200).json({
+        success: respone ? true : false,
+        cart: respone ? respone : 'No user update',
+    });
+});
+
 module.exports = {
     registerUser,
     loginUser,
     getCurrent,
-    refreshToken,
-    logout,
     forgotPassword,
     resetPassword,
     getUsers,
@@ -350,4 +331,5 @@ module.exports = {
     updateUserAdress,
     updateCart,
     finalregister,
+    removeProductInCart,
 };

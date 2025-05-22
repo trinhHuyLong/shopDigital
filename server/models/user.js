@@ -1,8 +1,7 @@
-const mongoose = require('mongoose'); // Erase if already required
+const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto-js');
 
-// Declare the Schema of the Mongo model
 var userSchema = new mongoose.Schema(
     {
         name: {
@@ -74,10 +73,10 @@ userSchema.methods = {
         return await bcrypt.compare(enteredPassword, this.password);
     },
     createPasswordResetToken: function () {
-        const resetToken = crypto.lib.WordArray.random(32).toString(); // Tạo token ngẫu nhiên
-        this.passwordResetToken = crypto.SHA256(resetToken).toString(); // Lưu mã băm của token vào DB
+        const resetToken = crypto.lib.WordArray.random(32).toString();
+        this.passwordResetToken = crypto.SHA256(resetToken).toString();
 
-        this.passwordResetExpires = Date.now() + 10 * 60 * 1000; // Token hết hạn sau 10 phút
+        this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
 
         return resetToken;
     },

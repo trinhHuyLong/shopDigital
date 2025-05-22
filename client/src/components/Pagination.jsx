@@ -6,7 +6,7 @@ import Pagitem from './Pagitem';
 const Pagination = ({ totalCount }) => {
     const pagination = usePagination(totalCount, 2);
     return (
-        <div className="flex items-center">
+        <div className="flex w-auto items-center">
             {pagination?.map((item, index) => {
                 return <Pagitem key={index} item={item} />;
             })}

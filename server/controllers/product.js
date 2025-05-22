@@ -10,12 +10,13 @@ const createProduct = asyncHandler(async (req, res) => {
     if (!(title && price && description && brand && category && color))
         throw new Error('Missing input');
     req.body.slug = slugify(title);
+    req.body.description = req.body.description.split('.');
     if (thumb) req.body.thumb = thumb;
     if (images) req.body.images = images;
     const product = await Product.create(req.body);
     return res.status(201).json({
         success: product ? true : false,
-        created: product ? product : 'Cannot create product',
+        mes: product ? 'Created' : 'Failed',
     });
 });
 
@@ -50,7 +51,19 @@ const getProducts = asyncHandler(async (req, res) => {
         const colorQuery = colorArr.map(el => ({ color: { $regex: el, $options: 'i' } }));
         colorQueryObject = { $or: colorQuery };
     }
-    const q = { ...colorQueryObject, ...formatedQueries };
+    let queryObject = {};
+    if (queries?.q) {
+        delete formatedQueries.q;
+        queryObject = {
+            $or: [
+                { color: { $regex: queries.q, $options: 'i' } },
+                { title: { $regex: queries.q, $options: 'i' } },
+                { category: { $regex: queries.q, $options: 'i' } },
+                { brand: { $regex: queries.q, $options: 'i' } },
+            ],
+        };
+    } else delete formatedQueries.q;
+    const q = { ...colorQueryObject, ...formatedQueries, ...queryObject };
     let queryCommand = Product.find(q);
 
     if (req.query.sort) {
@@ -87,6 +100,17 @@ const getProducts = asyncHandler(async (req, res) => {
 
 const updateProduct = asyncHandler(async (req, res) => {
     const { pid } = req.params;
+    const files = req?.files;
+    console.log(req.files);
+    if (files?.thumb) {
+        delete req.body.thumb;
+        req.body.thumb = files?.thumb[0]?.path;
+    }
+    if (files?.images) {
+        delete req.body.images;
+        req.body.images = files?.images.map(el => el.path);
+    }
+    console.log({ thumb: req.body.thumb, images: req.body.images });
     if (req.body.title) req.body.slug = slugify(req.body.title);
     const product = await Product.findByIdAndUpdate(pid, req.body, { new: true });
     return res.status(201).json({
