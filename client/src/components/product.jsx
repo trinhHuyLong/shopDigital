@@ -1,18 +1,13 @@
-import { useState } from 'react';
-import { FaHeart } from 'react-icons/fa';
-import { TiThMenu } from 'react-icons/ti';
-import { IoEye } from 'react-icons/io5';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, memo } from 'react';
+import { Link } from 'react-router-dom';
 
 import { formatMoney } from '../utils/helper';
 import label1 from '../assets/lable2.png';
 import label2 from '../assets/lable3.png';
 import renderStar from '../utils/rederStar';
-import { Selection } from '../components';
 
 const Product = ({ product, type }) => {
     const [isShow, setIsShow] = useState(false);
-    const navigate = useNavigate();
 
     return (
         <Link to={`/${product?.category?.toLowerCase()}/${product._id}/${product.title}`}>
@@ -67,4 +62,4 @@ const Product = ({ product, type }) => {
     );
 };
 
-export default Product;
+export default memo(Product);

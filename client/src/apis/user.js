@@ -27,6 +27,13 @@ export const apiForgotPassword = data =>
         data,
     });
 
+export const apiCheckTokenResetPassword = data =>
+    axios({
+        url: 'user/checkToken',
+        method: 'put',
+        data,
+    });
+
 export const apiResetPassword = data =>
     axios({
         url: 'user/resetpassword',

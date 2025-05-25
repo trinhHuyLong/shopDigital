@@ -3,8 +3,8 @@ import usePagination from '../hooks/usePagination';
 
 import Pagitem from './Pagitem';
 
-const Pagination = ({ totalCount }) => {
-    const pagination = usePagination(totalCount, 2);
+const Pagination = ({ totalCount, page }) => {
+    const pagination = usePagination(totalCount, page);
     return (
         <div className="flex w-auto items-center">
             {pagination?.map((item, index) => {

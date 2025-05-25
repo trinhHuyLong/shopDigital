@@ -39,3 +39,9 @@ export const apiDeleteProduct = async pid =>
         method: 'DELETE',
         url: '/product/' + pid,
     });
+
+export const apiDealDaily = async () =>
+    axios({
+        method: 'GET',
+        url: '/product/dealdaily',
+    });

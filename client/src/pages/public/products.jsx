@@ -7,16 +7,18 @@ import { Product } from '../../components/index.js';
 import { sorts } from '../../utils/constants.jsx';
 
 const Products = () => {
-    const [sort, setSort] = useState('-createdAt');
+    const navigate = useNavigate();
     const { category } = useParams();
     const [params] = useSearchParams();
+    const [sort, setSort] = useState('-createdAt');
     const [products, setProducts] = useState(null);
     const [active, setActive] = useState(null);
-    const navigate = useNavigate();
+
     const fetchProductByCategory = async queries => {
         const response = await apiGetProducts(queries);
         setProducts(response);
     };
+
     const handleSetActive = name => {
         if (active === name) setActive(null);
         else setActive(name);
@@ -34,10 +36,17 @@ const Products = () => {
         for (let i of params.entries()) param.push(i);
         const queries = {};
         for (let i of params) queries[i[0]] = i[1];
-        navigate({
-            pathname: `/${category}`,
-            search: createSearchParams({ ...queries, sort }).toString(),
-        });
+        if (category) {
+            navigate({
+                pathname: `/${category}`,
+                search: createSearchParams({ ...queries, sort }).toString(),
+            });
+        } else {
+            navigate({
+                pathname: `/products`,
+                search: createSearchParams({ ...queries, sort }).toString(),
+            });
+        }
     }, [sort]);
 
     useEffect(() => {
@@ -60,22 +69,20 @@ const Products = () => {
             queries.price = { lte: queries.to };
             delete queries.to;
         }
-        if (category === ':category') {
+        if (!category) {
             fetchProductByCategory({ ...priceQuery, ...queries, limit: 12 });
         } else {
             fetchProductByCategory({ ...priceQuery, ...queries, category, limit: 12 });
         }
-        window.scrollTo(0, 0);
-    }, [params]);
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    }, [params, category]);
 
     return (
         <div className="w-full">
             <div className="h-[81px] flex justify-center items-center bg-gray-100">
                 <div className="w-main">
-                    <h3 className="font-semibold uppercase">
-                        {category === ':category' ? 'products' : category}
-                    </h3>
-                    <Breadcrumbs category={category === ':category' ? 'products' : category} />
+                    <h3 className="font-semibold uppercase">{!category ? 'products' : category}</h3>
+                    <Breadcrumbs category={!category ? 'products' : category} />
                 </div>
             </div>
             <div className="border w-main p-4 flex justify-between mt-8 m-auto">
@@ -89,10 +96,17 @@ const Products = () => {
                             type="input"
                         />
                         <SearchItem
-                            name="color"
+                            name="category"
                             activeClick={active}
                             handleSetActive={handleSetActive}
                         />
+                        {category && (
+                            <SearchItem
+                                name="brand"
+                                activeClick={active}
+                                handleSetActive={handleSetActive}
+                            />
+                        )}
                     </div>
                 </div>
                 <div className="w-1/5 flex-auto">
@@ -111,7 +125,7 @@ const Products = () => {
             </div>
             {products?.counts / 10 > 1 && (
                 <div className="w-main m-auto my-4 flex justify-center">
-                    <Pagination totalCount={products?.counts} />
+                    <Pagination totalCount={products?.counts} page={params.get('page')} />
                 </div>
             )}
         </div>

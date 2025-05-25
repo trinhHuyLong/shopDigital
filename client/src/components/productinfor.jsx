@@ -1,9 +1,7 @@
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 
-import { productInforTabs } from '../utils/constants.jsx';
 import { Votebar, VoteOption, Comment } from '../components';
 import renderStar from '../utils/rederStar';
 import { apiRatingProduct } from '../apis/product';
@@ -13,7 +11,6 @@ import path from '../utils/path';
 const ProductInfor = ({ totalRating, ratings, nameProduct, productId, handleSubmitVote }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [activeTab, setActiveTab] = useState(0);
     const { isLoggedIn } = useSelector(state => state.user);
     const toggleVote = () => {
         if (!isLoggedIn) {
@@ -60,22 +57,6 @@ const ProductInfor = ({ totalRating, ratings, nameProduct, productId, handleSubm
     };
     return (
         <div className="">
-            <div className="flex items-center gap-2 relative bottom-[-1px]">
-                {productInforTabs.map((el, index) => (
-                    <span
-                        onClick={() => setActiveTab(index)}
-                        className={`p-2 cursor-pointer px-4 ${
-                            activeTab === index ? 'bg-white border border-b-0' : 'bg-gray-200 '
-                        }`}
-                        key={index}
-                    >
-                        {el.name}
-                    </span>
-                ))}
-            </div>
-            <div className="w-full p-4 border">
-                {activeTab < 4 && <p>{productInforTabs[activeTab].content}</p>}
-            </div>
             <div>
                 <div className="flex mt-8">
                     <div className="flex-4 border flex flex-col items-center justify-center">

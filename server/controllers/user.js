@@ -41,7 +41,8 @@ const registerUser = asyncHandler(async (req, res) => {
             display: inline-block;
             ">
             ${token}
-            </p>`;
+            </p>
+            <p>This code is valid for 15 minutes from submission.</p>`;
             await sendMail({ email, html, subject: 'confirm register new account' });
         }
 
@@ -125,8 +126,23 @@ const forgotPassword = asyncHandler(async (req, res) => {
     const resetToken = user.createPasswordResetToken();
     await user.save();
 
-    const html = `Xin vui lòng click vào link dưới đây để thay đổi mật khẩu của bạn. 
-  Link này sẽ hết hạn sau 15 phút kể từ bây giờ. <a href=${process.env.CLIENT_URL}/reset-password/${resetToken}>Click here</a>`;
+    const html = `<h2>Hello ${user.name},</h2><br/>
+            <h3>We have received your request to change your password. Please enter this code into our website:</h3>
+            <p style="
+            background-color: #eaf4ff;
+            border: 1px solid #007bff;
+            border-radius: 8px;
+            padding: 16px 32px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 24px;
+            letter-spacing: 8px;
+            display: inline-block;
+            ">
+            ${resetToken}
+            </p>
+            <p>This code is valid for 10 minutes from submission.</p>
+            `;
 
     const data = {
         email,
@@ -144,11 +160,29 @@ const forgotPassword = asyncHandler(async (req, res) => {
     });
 });
 
-const resetPassword = asyncHandler(async (req, res) => {
-    const { password, token } = req.body;
-    if (!password || !token) throw new Error('Please provide a password and token');
+const checkTokenResetPass = asyncHandler(async (req, res) => {
+    const { token, email } = req.body;
+    if (!email || !token) throw new Error('Please provide a password and token');
     const passwordResetToken = crypto.SHA256(token).toString();
     const user = await User.findOne({
+        email,
+        passwordResetToken,
+        passwordResetExpires: { $gt: Date.now() },
+    });
+    if (user) res.cookie('tokenPass', token, { httpOnly: true, maxAge: 60 * 60 * 1000 });
+    return res.status(200).json({
+        success: user ? true : false,
+        message: user ? 'Enter new password' : 'Token is not invalid',
+    });
+});
+
+const resetPassword = asyncHandler(async (req, res) => {
+    const { password, email } = req.body;
+    const token = req.cookies.tokenPass;
+    if (!password || !token || !email) throw new Error('Please provide a password and token');
+    const passwordResetToken = crypto.SHA256(token).toString();
+    const user = await User.findOne({
+        email,
         passwordResetToken,
         passwordResetExpires: { $gt: Date.now() },
     });
@@ -332,4 +366,5 @@ module.exports = {
     updateCart,
     finalregister,
     removeProductInCart,
+    checkTokenResetPass,
 };

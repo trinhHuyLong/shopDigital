@@ -3,6 +3,49 @@ const slugify = require('slugify');
 
 const Product = require('../models/product');
 
+let dealdaily;
+let hour = 23,
+    minutes = 59,
+    second = 59;
+
+(async () => {
+    dealdaily = await Product.aggregate([{ $sample: { size: 1 } }]);
+})();
+
+setInterval(() => {
+    if (second > 0) {
+        second -= 1;
+    } else {
+        if (minutes > 0) {
+            minutes -= 1;
+            second = 59;
+        } else {
+            hour -= 1;
+            minutes = 59;
+            second = 59;
+        }
+    }
+}, 1000);
+
+setInterval(async () => {
+    dealdaily = await Product.aggregate([{ $sample: { size: 1 } }]);
+    (hour = 23), (minutes = 59), (second = 59);
+    setInterval(() => {
+        if (second > 0) {
+            second -= 1;
+        } else {
+            if (minutes > 0) {
+                minutes -= 1;
+                second = 59;
+            } else {
+                hour -= 1;
+                minutes = 59;
+                second = 59;
+            }
+        }
+    }, 1000);
+}, 24 * 60 * 60 * 1000);
+
 const createProduct = asyncHandler(async (req, res) => {
     const { title, price, description, brand, category, color } = req.body;
     const thumb = req?.files?.thumb[0]?.path;
@@ -43,7 +86,12 @@ const getProducts = asyncHandler(async (req, res) => {
     queryString = queryString.replace(/\b(gte|gt|lt|lte)\b/g, matchEl => `$${matchEl}`);
     const formatedQueries = JSON.parse(queryString);
     let colorQueryObject = {};
-    if (queries?.title) formatedQueries.title = { $regex: queries.title, $options: 'i' };
+    if (queries?.title) {
+        formatedQueries.title = { $regex: queries.title, $options: 'i' };
+    } else delete formatedQueries.title;
+    if (queries?.brand) {
+        formatedQueries.brand = { $regex: queries.brand, $options: 'i' };
+    } else delete formatedQueries.brand;
     if (queries?.category) formatedQueries.category = { $regex: queries.category, $options: 'i' };
     if (queries?.color) {
         delete formatedQueries.color;
@@ -56,7 +104,6 @@ const getProducts = asyncHandler(async (req, res) => {
         delete formatedQueries.q;
         queryObject = {
             $or: [
-                { color: { $regex: queries.q, $options: 'i' } },
                 { title: { $regex: queries.q, $options: 'i' } },
                 { category: { $regex: queries.q, $options: 'i' } },
                 { brand: { $regex: queries.q, $options: 'i' } },
@@ -101,7 +148,6 @@ const getProducts = asyncHandler(async (req, res) => {
 const updateProduct = asyncHandler(async (req, res) => {
     const { pid } = req.params;
     const files = req?.files;
-    console.log(req.files);
     if (files?.thumb) {
         delete req.body.thumb;
         req.body.thumb = files?.thumb[0]?.path;
@@ -110,7 +156,6 @@ const updateProduct = asyncHandler(async (req, res) => {
         delete req.body.images;
         req.body.images = files?.images.map(el => el.path);
     }
-    console.log({ thumb: req.body.thumb, images: req.body.images });
     if (req.body.title) req.body.slug = slugify(req.body.title);
     const product = await Product.findByIdAndUpdate(pid, req.body, { new: true });
     return res.status(201).json({
@@ -125,6 +170,13 @@ const deleteProduct = asyncHandler(async (req, res) => {
     return res.status(201).json({
         success: product ? true : false,
         updateProduct: product ? product : 'Cannot delete product',
+    });
+});
+
+const dealdailyProduct = asyncHandler(async (req, res) => {
+    return res.status(201).json({
+        success: dealdaily ? true : false,
+        product: dealdaily ? { dealdaily: dealdaily?.[0], hour, minutes, second } : 'error',
     });
 });
 
@@ -164,7 +216,6 @@ const ratings = asyncHandler(async (req, res) => {
             },
             { new: true }
         );
-        console.log(respone);
     }
 
     const updateProduct = await Product.findById(pid);
@@ -203,4 +254,5 @@ module.exports = {
     deleteProduct,
     ratings,
     uploadImagesProduct,
+    dealdailyProduct,
 };

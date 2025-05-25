@@ -97,9 +97,10 @@ export const colors = [
 export const sorts = [
     {
         id: 1,
-        value: '-sold',
-        text: 'Best selling',
+        value: '-createdAt',
+        text: 'Date, new to old',
     },
+
     {
         id: 2,
         value: 'title',
@@ -122,8 +123,8 @@ export const sorts = [
     },
     {
         id: 6,
-        value: '-createdAt',
-        text: 'Date, new to old',
+        value: '-sold',
+        text: 'Best selling',
     },
     {
         id: 7,

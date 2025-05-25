@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { FaArrowRight, FaArrowLeft } from 'react-icons/fa';
 import {
     useSearchParams,
     useNavigate,
@@ -12,7 +12,7 @@ const Pagitem = ({ item }) => {
     const navigate = useNavigate();
     const [params] = useSearchParams();
     const location = useLocation();
-    const handlePagination = () => {
+    const handlePagination = item => {
         let param = [];
         for (let i of params.entries()) param.push(i);
         const queries = {};
@@ -27,16 +27,24 @@ const Pagitem = ({ item }) => {
     };
     return (
         <button
-            onClick={handlePagination}
+            onClick={() =>
+                handlePagination(
+                    item == 'left'
+                        ? +params.get('page') - 1
+                        : item === 'right'
+                        ? +params.get('page') + 1
+                        : item
+                )
+            }
             className={clsx(
-                'w-10 h-10 flex items-center justify-center ',
-                Number(item) && 'hover:rounded-full hover:bg-gray-300 cursor-pointer',
-                +params.get('page') === +item && 'bg-gray-300 rounded-full',
-                !params.get('page') && item === 1 && 'bg-gray-300 rounded-full'
+                'w-8 h-8 mx-1 flex items-center justify-center border',
+                'hover:bg-gray-300 hover:border-orange-400 cursor-pointer',
+                +params.get('page') === +item && 'bg-gray-300 border-orange-400'
             )}
-            disabled={!Number(item)}
         >
-            {item}
+            {item !== 'left' && item !== 'right' && item}
+            {item === 'left' && <FaArrowLeft />}
+            {item === 'right' && <FaArrowRight />}
         </button>
     );
 };

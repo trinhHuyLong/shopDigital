@@ -35,10 +35,9 @@ const UpdateProduc = ({ editProduct, render, setEditProduct }) => {
     };
 
     const handleCreateProduct = async data => {
-        const invalids = validate(payload, setInvalidFields);
+        const invalids = validate(setInvalidFields);
         if (invalids === 0) {
             if (data.category) {
-                console.log(data.category);
                 data.category = categories?.find(
                     el => el.title.toLowerCase() === data.category.toLowerCase()
                 )?.title;
@@ -50,19 +49,29 @@ const UpdateProduc = ({ editProduct, render, setEditProduct }) => {
                 formData.append(i[0], i[1]);
             }
             if (finalPayload?.thumb) {
+                formData.delete('thumb');
                 formData.append('thumb', finalPayload.thumb[0]);
             } else {
+                formData.delete('thumb');
+                console.log(preview?.thumb);
                 formData.append('thumb', preview?.thumb);
             }
             if (finalPayload.images) {
+                console.log(1);
+                formData.delete('images');
                 for (let image of finalPayload.images) formData.append('images', image);
             } else {
-                formData.append('images', preview?.images);
+                console.log(preview?.images);
+                formData.delete('images');
+                if (preview?.images?.length > 0) {
+                    preview.images.forEach(img => {
+                        formData.append('images', img.path);
+                    });
+                }
             }
             dispatch(showModal({ isShowModal: true, modalChildren: <Loading /> }));
             const response = await apiUpdateProduct(formData, editProduct._id);
             dispatch(showModal({ isShowModal: false, modalChildren: null }));
-            console.log(response);
             if (response.success) {
                 toast.success('Create product successful');
                 reset();
@@ -269,7 +278,7 @@ const UpdateProduc = ({ editProduct, render, setEditProduct }) => {
                         type="submit"
                         className="bg-main text-white px-4 py-2 rounded-md cursor-pointer hover:opacity-80 mt-8"
                     >
-                        Create New Product
+                        Update New Product
                     </button>
                 </form>
             </div>

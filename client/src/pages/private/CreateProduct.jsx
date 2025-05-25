@@ -71,6 +71,7 @@ const CreateProduct = () => {
     const handlePreviewImages = async files => {
         const imagesPreview = [];
         for (let file of files) {
+            console.log(file.type);
             if (file.type !== 'image/png' && file.type !== 'image/jpg') {
                 toast.warning('File not supported');
                 return;

@@ -3,8 +3,9 @@ const productController = require('../controllers/product');
 const { verifyAccessToken, isAdmin } = require('../middlewares/verify');
 const uploader = require('../config/cloudinary.config');
 
-router.get('/:pid', productController.getProduct);
 router.get('/', productController.getProducts);
+router.get('/dealdaily', productController.dealdailyProduct);
+router.get('/:pid', productController.getProduct);
 router.post(
     '/',
     [verifyAccessToken, isAdmin],

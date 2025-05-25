@@ -8,6 +8,7 @@ router.put('/finalregister/:token', userController.finalregister);
 router.post('/login', userController.loginUser);
 router.get('/current', verifyAccessToken, userController.getCurrent);
 router.post('/forgot', userController.forgotPassword);
+router.put('/checkToken', userController.checkTokenResetPass);
 router.put('/resetpassword', userController.resetPassword);
 router.get('/', [verifyAccessToken, isAdmin], userController.getUsers);
 router.delete('/:uid', [verifyAccessToken, isAdmin], userController.deleteUser);

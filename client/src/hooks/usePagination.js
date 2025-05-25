@@ -1,33 +1,41 @@
 import { useMemo } from 'react';
+
 import { generateRange } from '../utils/helper';
 
-const usePagination = (totalProductCount, currentPage, siblingCount = 1) => {
+const usePagination = (totalProductCount, currentPage, siblingCount = 2) => {
     const paginationArray = useMemo(() => {
-        const pageSize = 10;
+        const pageSize = 12;
         const paginationCount = Math.ceil(totalProductCount / pageSize);
-        const totalPaginationItem = siblingCount + 5; // 2 on each side + current page + 2 at the end
+        const totalPaginationItem = 2 * siblingCount + 2;
         if (paginationCount <= totalPaginationItem) {
-            return generateRange(1, paginationCount);
+            let range = generateRange(1, paginationCount);
+            if (currentPage != 1) range = ['left', ...range];
+            if (currentPage != paginationCount) range = [...range, 'right'];
+            return range;
         }
-        const isShowLeft = currentPage - siblingCount > 2;
-        const isShowRight = currentPage + siblingCount < paginationCount - 2;
-        if (isShowLeft && !isShowRight) {
-            const rightCount = paginationCount - 4;
-            const rightRange = generateRange(rightCount, paginationCount);
-            return [1, '...', ...rightRange];
-        }
-        if (!isShowLeft && isShowRight) {
-            const leftRange = generateRange(1, 5);
-            return [...leftRange, '...', paginationCount];
-        }
+        const isShowLeft = +currentPage - siblingCount > 1;
+        const isShowRight = +currentPage + siblingCount > paginationCount - 2;
 
-        const siblingLeft = Math.max(currentPage - siblingCount, 1);
-        const siblingRight = Math.min(currentPage + siblingCount, paginationCount);
-        if (isShowLeft && isShowRight) {
+        const siblingLeft = Math.max(+currentPage - siblingCount, 1);
+        const siblingRight = Math.min(+currentPage + siblingCount, paginationCount);
+        if (!isShowLeft) {
+            const leftRange = generateRange(1, 4);
+            if (currentPage != 1) return ['left', ...leftRange, '...', 'right'];
+            return [...leftRange, '...', 'right'];
+        }
+        if (isShowLeft) {
+            if (isShowRight) {
+                console.log(1);
+                const middleRange = generateRange(siblingLeft, siblingRight);
+                if (currentPage == paginationCount) return ['left', 1, , ...middleRange];
+                return ['left', 1, '...', ...middleRange, 'right'];
+            }
             const middleRange = generateRange(siblingLeft, siblingRight);
-            return [1, '...', ...middleRange, '...', paginationCount];
+            if (currentPage == paginationCount) return ['left', 1, '...', ...middleRange, '...'];
+            return ['left', 1, '...', ...middleRange, '...', 'right'];
         }
     }, [totalProductCount, currentPage, siblingCount]);
+
     return paginationArray;
 };
 

@@ -8,6 +8,7 @@ const InputField = ({
     invalidFields,
     setInvalideFiedls,
     isHideLable,
+    placeholder,
 }) => {
     const [isFocused, setIsFocused] = useState(false);
 
@@ -21,7 +22,7 @@ const InputField = ({
             <input
                 type={type || 'text'}
                 className="px-4 py-2 rounded-sm border w-full mt-2 placeholder:text-sm placeholder:italic outline-none"
-                placeholder={nameKey?.slice(0, 1).toUpperCase() + nameKey?.slice(1)}
+                placeholder={placeholder || nameKey?.slice(0, 1).toUpperCase() + nameKey?.slice(1)}
                 value={value}
                 onChange={e => setValue(e.target.value)}
                 onFocus={() => {

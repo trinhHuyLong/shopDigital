@@ -60,6 +60,7 @@ function App() {
                     <Route path={path.FAQ} element={<FAQ />} />
                     <Route path={path.RESETPASSWORD} element={<ResetPassword />} />
                     <Route path={path.PRODUCTS} element={<Products />} />
+                    <Route path={path.CATEGORY} element={<Products />} />
                     <Route path={path.DETAIL_CART} element={<DetailCart />} />
                     <Route path={path.ALL} element={<Home />} />
                 </Route>

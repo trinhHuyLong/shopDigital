@@ -1,22 +1,16 @@
-import React from 'react';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import { IoIosArrowForward } from 'react-icons/io';
-import { useSelector } from 'react-redux';
 import { apiGetProducts } from '../../apis/product';
-
-import {
-    Sidebar,
-    Banner,
-    BestSeller,
-    DealDaily,
-    FeatureProducts,
-    CustomSlider,
-} from '../../components';
+import { Sidebar, Banner, BestSeller, DealDaily, FeatureProducts } from '../../components';
 
 function Home() {
+    const navigate = useNavigate();
     const [bestSeller, setBestSeller] = useState([]);
     const [newProducts, setNewProducts] = useState([]);
+    const { categories } = useSelector(state => state.app);
 
     const fetchProducts = async () => {
         const [bestSeller, newProducts] = await Promise.all([
@@ -31,8 +25,6 @@ function Home() {
     useEffect(() => {
         fetchProducts();
     }, []);
-    const { categories } = useSelector(state => state.app);
-    const { isLogged, token } = useSelector(state => state.user);
     return (
         <div className="w-main mt-6">
             <div className="w-main flex">
@@ -70,6 +62,11 @@ function Home() {
                                             {item.brand.map((brand, index) => {
                                                 return (
                                                     <div
+                                                        onClick={() => {
+                                                            navigate(
+                                                                `/${item.title?.toLowerCase()}?brand=${brand}`
+                                                            );
+                                                        }}
                                                         key={index}
                                                         className="flex items-center gap-1 text-gray-400 cursor-pointer hover:text-main"
                                                     >

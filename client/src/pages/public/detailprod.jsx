@@ -63,7 +63,7 @@ const DetailProd = () => {
     const { current } = useSelector(state => state.user);
     const [product, setProduct] = useState(null);
     const [products, setProducts] = useState(null);
-    const [quantity, setQuantity] = useState('');
+    const [quantity, setQuantity] = useState('1');
     const { id, title, category } = useParams();
     const [currentImg, setCurrentImg] = useState(null);
     const navigate = useNavigate();
@@ -78,7 +78,7 @@ const DetailProd = () => {
     };
 
     const fetchProducts = async id => {
-        const response = await apiGetProducts({ category });
+        const response = await apiGetProducts({ _id: { $ne: id } });
         if (response.success) {
             setProducts(response.products);
         }
@@ -97,19 +97,15 @@ const DetailProd = () => {
                 if (rs.isConfirmed) navigate(`${path.LOGIN}`);
             });
         }
-        if (!quantity) {
-            toast.info('Please set quantity');
-        } else {
-            const response = await apiUpdateCart({
-                pid: product._id,
-                color: product.color,
-                quantity,
-            });
-            if (response.success) {
-                toast.success('Upadate cart success');
-                dispatch(getCurrent());
-            } else toast.error('fail');
-        }
+        const response = await apiUpdateCart({
+            pid: product._id,
+            color: product.color,
+            quantity,
+        });
+        if (response.success) {
+            toast.success('Upadate cart success');
+            dispatch(getCurrent());
+        } else toast.error('fail');
     };
 
     const handleChangeImg = e => {
@@ -131,7 +127,7 @@ const DetailProd = () => {
     useEffect(() => {
         if (id) {
             fetchProductData(id);
-            fetchProducts();
+            fetchProducts(id);
         }
         window.scrollTo(0, 0);
     }, [id]);
@@ -195,14 +191,6 @@ const DetailProd = () => {
                                     {el}
                                 </li>
                             ))}
-                        {product?.description.length === 1 && (
-                            <div
-                                className="text-sm line-clamp-[10] mb-8"
-                                dangerouslySetInnerHTML={{
-                                    __html: DOMPurify.sanitize(product?.description[0]),
-                                }}
-                            ></div>
-                        )}
                     </ul>
                     <div className="flex flex-col gap-8">
                         <div className="flex items-center gap-4">
@@ -224,6 +212,9 @@ const DetailProd = () => {
                 </div>
             </div>
             <div className="w-main m-auto mt-8">
+                <h3 className="text-[20px] font-semibold py-[15px] border-b-2 uppercase border-main">
+                    Product review:
+                </h3>
                 <ProductInfor
                     totalRating={product?.totalRatings}
                     ratings={product?.ratings}

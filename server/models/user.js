@@ -73,7 +73,7 @@ userSchema.methods = {
         return await bcrypt.compare(enteredPassword, this.password);
     },
     createPasswordResetToken: function () {
-        const resetToken = crypto.lib.WordArray.random(32).toString();
+        const resetToken = Math.floor(100000 + Math.random() * 900000).toString();
         this.passwordResetToken = crypto.SHA256(resetToken).toString();
 
         this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
