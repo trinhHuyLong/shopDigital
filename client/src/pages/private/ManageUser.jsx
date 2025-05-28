@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate, createSearchParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
@@ -22,6 +22,7 @@ const ManageUser = () => {
         mobile: '',
         isBlocked: '',
     });
+    const navigate = useNavigate();
     const [users, setUsers] = useState([]);
     const [edit, setEdit] = useState(null);
     const [search, setSearch] = useState('');
@@ -43,7 +44,7 @@ const ManageUser = () => {
             if (result.isConfirmed) {
                 const response = await apiDeleteUser(uid);
                 if (response.success) {
-                    fetchUsers({ ...params, limit: 10 });
+                    fetchUsers({ ...params, limit: 12 });
                     toast.success('Delete user success!');
                 } else {
                     toast.error(response.message || 'Delete user failed!');
@@ -56,7 +57,7 @@ const ManageUser = () => {
         const response = await apiUpdateUser(data, edit._id);
         if (response.success) {
             setEdit(null);
-            fetchUsers({ ...params, limit: 10 });
+            fetchUsers({ ...params, limit: 12 });
             toast.success('Update user success!');
         } else {
             toast.error(response.message || 'Update user failed!');
@@ -69,8 +70,17 @@ const ManageUser = () => {
         const param = Object.fromEntries([...params]);
         if (searchDebounce) {
             param.search = searchDebounce;
+        } else {
+            delete param.search;
         }
-        fetchUsers({ ...param, limit: 10 });
+        if (!param.page) {
+            param.page = 1;
+        }
+        navigate({
+            pathname: `/admin/manage-users`,
+            search: createSearchParams(param).toString(),
+        });
+        fetchUsers({ ...param, limit: 12 });
     }, [searchDebounce, params]);
 
     useEffect(() => {
@@ -115,9 +125,13 @@ const ManageUser = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {users?.users?.map((user, index) => (
+                            {users?.users?.map((user, id) => (
                                 <tr key={user._id} className="border border-gray-500 ">
-                                    <td className="px-4 py-2">{index + 1}</td>
+                                    <td className="px-4 py-2">
+                                        {!params.get('page')
+                                            ? id + 1
+                                            : (+params.get('page') - 1) * 12 + id + 1}
+                                    </td>
                                     <td className="px-4 py-2">
                                         {edit?._id === user._id ? (
                                             <InputForm
@@ -262,9 +276,11 @@ const ManageUser = () => {
                         </tbody>
                     </table>
                 </form>
-                <div className="w-full m-auto my-4 flex justify-center">
-                    <Pagination totalCount={users?.counts} />
-                </div>
+                {users?.counts > 12 && (
+                    <div className="w-full m-auto my-4 flex justify-center">
+                        <Pagination totalCount={users?.counts} />
+                    </div>
+                )}
             </div>
         </div>
     );

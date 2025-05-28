@@ -11,7 +11,14 @@ const notActiveStyle =
     'px-4 py-2 flex items-center gap-2  hover:bg-main hover:opacity-80 hover:text-white';
 
 const SidebarAdmin = () => {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState([]);
+    const handleSetOpen = id => {
+        if (open.includes(id)) {
+            setOpen(open.filter(num => num !== id));
+        } else {
+            setOpen([...open, id]);
+        }
+    };
     return (
         <div className="bg-white h-full py-4 font-sm">
             <div className="flex flex-col items-center justify-center gap-2 py-4">
@@ -37,15 +44,19 @@ const SidebarAdmin = () => {
                             </NavLink>
                         )}
                         {item.type === 'parent' && (
-                            <div className="flex flex-col  " onClick={() => setOpen(!open)}>
+                            <div className="flex flex-col  " onClick={() => handleSetOpen(item.id)}>
                                 <div className="px-4 py-2 flex items-center justify-between hover:bg-main hover:opacity-80 hover:text-white cursor-pointer">
                                     <div className="flex items-center gap-2">
                                         <span>{item.icon}</span>
                                         <span>{item.text}</span>
                                     </div>
-                                    {open ? <AiOutlineCaretDown /> : <AiOutlineCaretRight />}
+                                    {open.includes(item.id) ? (
+                                        <AiOutlineCaretDown />
+                                    ) : (
+                                        <AiOutlineCaretRight />
+                                    )}
                                 </div>
-                                {open && (
+                                {open.includes(item.id) && (
                                     <div className="flex flex-col">
                                         {item.submenu.map(sub => (
                                             <NavLink

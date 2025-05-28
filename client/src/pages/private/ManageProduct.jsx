@@ -61,13 +61,13 @@ const ManageProduct = () => {
     useEffect(() => {
         const searchParams = Object.fromEntries([...params]);
 
-        fetchProduct({ ...searchParams, q: queryDebounce, limit: 10 });
+        fetchProduct({ ...searchParams, q: queryDebounce, limit: 12 });
     }, [params, update]);
 
     useEffect(() => {
         navigate({
             pathname: location.pathname,
-            search: createSearchParams({ q: queryDebounce }).toString(),
+            search: createSearchParams({ q: queryDebounce, page: 1 }).toString(),
         });
     }, [queryDebounce]);
 
@@ -100,38 +100,36 @@ const ManageProduct = () => {
             <table>
                 <thead>
                     <tr className="border bg-sky-900 text-white  border-gray-700 py-2">
-                        <th className="text-center py-2">Order</th>
-                        <th className="text-center py-2">Thumb</th>
-                        <th className="text-center py-2">Title</th>
-                        <th className="text-center py-2">Brand</th>
-                        <th className="text-center py-2">Category</th>
-                        <th className="text-center py-2">Price</th>
-                        <th className="text-center py-2">Quantity</th>
-                        <th className="text-center py-2">Sold</th>
-                        <th className="text-center py-2">Color</th>
-                        <th className="text-center py-2">Ratings</th>
-                        <th className="text-center py-2">Action</th>
+                        <th className="py-2 pl-2 text-left">#</th>
+                        <th className="py-2 text-left">Thumb</th>
+                        <th className="py-2 text-left">Title</th>
+                        <th className="py-2 text-left">Brand</th>
+                        <th className="py-2 text-left">Category</th>
+                        <th className="py-2 text-left">Price</th>
+                        <th className="py-2 text-left">Quantity</th>
+                        <th className="py-2 text-left">Sold</th>
+                        <th className="py-2 text-left">Ratings</th>
+                        <th className="py-2 text-left">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     {product?.map((el, id) => (
                         <tr key={id}>
-                            <td className="text-center py-2">
+                            <td className="py-2 pl-2">
                                 {!params.get('page')
                                     ? id + 1
-                                    : (+params.get('page') - 1) * 10 + id + 1}
+                                    : (+params.get('page') - 1) * 12 + id + 1}
                             </td>
-                            <td className="text-center py-2">
+                            <td className="py-2">
                                 <img src={el.thumb} className="w-12 h-12 object-cover" />
                             </td>
-                            <td className="text-center py-2">{el.title}</td>
-                            <td className="text-center py-2">{el.brand}</td>
-                            <td className="text-center py-2">{el.category}</td>
-                            <td className="text-center py-2">{el.price}</td>
-                            <td className="text-center py-2">{el.quantity}</td>
-                            <td className="text-center py-2">{el.sold}</td>
-                            <td className="text-center py-2">{el.color}</td>
-                            <td className="text-center py-2">{el.totalRatings}</td>
+                            <td className="py-2">{el.title}</td>
+                            <td className="py-2">{el.brand}</td>
+                            <td className="py-2">{el.category}</td>
+                            <td className="py-2">{el.price}</td>
+                            <td className="py-2">{el.quantity}</td>
+                            <td className="py-2">{el.sold}</td>
+                            <td className="py-2">{el.totalRatings}</td>
                             <td>
                                 <span
                                     onClick={() => setEditProduct(el)}
@@ -151,7 +149,7 @@ const ManageProduct = () => {
                 </tbody>
             </table>
             <div className="w-full flex justify-center my-8">
-                <Pagination totalCount={count} />
+                <Pagination totalCount={count} page={params.get('page')} />
             </div>
         </div>
     );

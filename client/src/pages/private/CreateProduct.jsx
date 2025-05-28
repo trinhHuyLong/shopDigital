@@ -3,22 +3,19 @@ import { useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import { InputForm, Select, MarkdownEditor, Loading } from '../../components';
+import { InputForm, Select, Loading } from '../../components';
 import { validate, fileToBase64 } from '../../utils/helper';
 import { apiCreateProduct } from '../../apis/product';
 import { showModal } from '../../redux/app/appSlice';
 
 const CreateProduct = () => {
     const dispatch = useDispatch();
-    const { categories, modalChildren, isShowModal } = useSelector(state => state.app);
+    const { categories } = useSelector(state => state.app);
     const [preview, setPreview] = useState({
         thumb: null,
         images: [],
     });
     const [invalidFields, setInvalidFields] = useState([]);
-    const changeValue = e => {
-        setPayload(e);
-    };
     const {
         register,
         formState: { errors },
@@ -71,7 +68,6 @@ const CreateProduct = () => {
     const handlePreviewImages = async files => {
         const imagesPreview = [];
         for (let file of files) {
-            console.log(file.type);
             if (file.type !== 'image/png' && file.type !== 'image/jpg') {
                 toast.warning('File not supported');
                 return;
@@ -130,16 +126,6 @@ const CreateProduct = () => {
                             fullWidth
                             placeholder="Quantity of new product"
                             type="number"
-                            style="flex-auto"
-                        />
-                        <InputForm
-                            lable="Color"
-                            register={register}
-                            errors={errors}
-                            id="color"
-                            validate={{ required: 'Need fill this field' }}
-                            fullWidth
-                            placeholder="Color of new product"
                             style="flex-auto"
                         />
                     </div>

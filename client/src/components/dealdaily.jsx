@@ -13,6 +13,10 @@ const DealDaily = () => {
     const [hour, setHour] = useState(0);
     const [minute, setMinute] = useState(0);
     const [second, setSecond] = useState(10);
+    const price = Number(dealdaily?.price) || 0;
+    const sale = Number(dealdaily?.sale) || 0;
+
+    console.log(sale, price);
 
     const fetchDealDaily = async () => {
         const response = await apiDealDaily();
@@ -75,7 +79,8 @@ const DealDaily = () => {
                     className="w-full object-contain"
                 />
                 <span className="line-clamp-1">{dealdaily?.title}</span>
-                <span>{`${formatMoney(dealdaily?.price)} VND`}</span>
+                <span className="line-through">{`${formatMoney(dealdaily?.price)} VND`}</span>
+                <span className="">{`${formatMoney((price / 100) * (100 - sale))} VND`}</span>
             </div>
             <div className="px-4 mt-8">
                 <div className="flex justify-center items-center gap-2 mb-4">

@@ -17,9 +17,16 @@ const MemberSideBar = () => {
     return (
         <div className="bg-gray-100 h-full py-4 font-sm">
             <div className="flex flex-col items-center justify-center gap-2 py-4">
-                <div to="/" className="w-full flex items-center py-4 flex-col justify-center">
-                    <img src={current.avatar || avatar} alt="" className="w-16 h-16 object-cover" />
-                    <div className="flex justify-center pt-2">
+                <div
+                    to="/"
+                    className="w-full flex items-center py-4 flex-col justify-center border-b mb-4"
+                >
+                    <img
+                        src={current.avatar || avatar}
+                        alt=""
+                        className="w-16 h-16 object-cover rounded-full"
+                    />
+                    <div className="flex justify-center pt-2 font-semibold">
                         <small>{current.name}</small>
                     </div>
                 </div>

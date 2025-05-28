@@ -18,8 +18,10 @@ export const path = {
     DASHBOARD: 'dashboard',
     MANAGE_USERS: 'manage-users',
     MANAGE_PRODUCTS: 'manage-products',
+    MANAGE_CATEGORY: 'manage-category',
     MANAGE_ORDERS: 'manage-orders',
     CREATE_PRODUCT: 'create-product',
+    CREATE_CATEGORY: 'create-category',
 
     //Member
     MEMBER: 'member',

@@ -1,7 +1,6 @@
 import { MdLocalPhone } from 'react-icons/md';
 import { TbMailFilled } from 'react-icons/tb';
 import { GiShoppingBag } from 'react-icons/gi';
-import { FaCircleUser } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -9,6 +8,7 @@ import path from '../utils/path';
 import logo from '../assets/logo.png';
 import { useEffect, useState } from 'react';
 import { showCart } from '../redux/app/appSlice';
+import defaultAvatar from '../assets/avatarDefault.svg';
 
 const Header = () => {
     const dispatch = useDispatch();
@@ -59,8 +59,11 @@ const Header = () => {
                             className="flex  items-center justify-center px-6 border-r gap-2 cursor-pointer relative"
                             id="profile"
                         >
-                            <FaCircleUser color="red" />
-                            <span>Profile</span>
+                            <img
+                                src={current?.avatar || defaultAvatar}
+                                className="w-6 h-6 rounded-full"
+                            />
+                            <span>{current?.name}</span>
                             {isShowOption && (
                                 <div
                                     onClick={e => e.stopPropagation()}

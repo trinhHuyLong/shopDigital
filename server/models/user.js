@@ -32,14 +32,12 @@ var userSchema = new mongoose.Schema(
             {
                 product: { type: mongoose.Types.ObjectId, ref: 'Product' },
                 quantity: Number,
-                color: String,
             },
         ],
         address: {
             type: Array,
             default: [],
         },
-        wishlist: [{ type: mongoose.Types.ObjectId, ref: 'Product' }],
         isBlocked: {
             type: Boolean,
             default: false,

@@ -26,6 +26,8 @@ import {
     ManageOrder,
     ManageUser,
     ManageProduct,
+    ManageCategory,
+    CreateCategory,
 } from './pages/private';
 import { Persional, MemberLayout, History, MyCart, WishList, DetailCart } from './pages/member';
 import path from './utils/path';
@@ -66,10 +68,12 @@ function App() {
                 </Route>
                 <Route path={path.ADMIN} element={<AdminLayout />}>
                     <Route path={path.CREATE_PRODUCT} element={<CreateProduct />} />
+                    <Route path={path.CREATE_CATEGORY} element={<CreateCategory />} />
                     <Route path={path.DASHBOARD} element={<DashBoard />} />
                     <Route path={path.MANAGE_ORDERS} element={<ManageOrder />} />
                     <Route path={path.MANAGE_PRODUCTS} element={<ManageProduct />} />
                     <Route path={path.MANAGE_USERS} element={<ManageUser />} />
+                    <Route path={path.MANAGE_CATEGORY} element={<ManageCategory />} />
                 </Route>
                 <Route path={path.MEMBER} element={<MemberLayout />}>
                     <Route path={path.PERSIONAL} element={<Persional />} />

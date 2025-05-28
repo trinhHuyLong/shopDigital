@@ -36,6 +36,8 @@ const Products = () => {
         for (let i of params.entries()) param.push(i);
         const queries = {};
         for (let i of params) queries[i[0]] = i[1];
+
+        console.log(param);
         if (category) {
             navigate({
                 pathname: `/${category}`,

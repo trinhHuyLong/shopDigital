@@ -79,6 +79,7 @@ const UpdateProduc = ({ editProduct, render, setEditProduct }) => {
                     thumb: null,
                     images: [],
                 });
+                setEditProduct(null);
             } else {
                 toast.error('Create product error');
             }
@@ -110,7 +111,6 @@ const UpdateProduc = ({ editProduct, render, setEditProduct }) => {
             title: editProduct?.title,
             price: editProduct?.price,
             quantity: editProduct?.quantity,
-            color: editProduct?.color,
             category: editProduct?.category.toLowerCase(),
             brand: editProduct?.brand?.toLowerCase(),
             description: editProduct?.description?.join('. '),
@@ -174,16 +174,6 @@ const UpdateProduc = ({ editProduct, render, setEditProduct }) => {
                             fullWidth
                             placeholder="Quantity of new product"
                             type="number"
-                            style="flex-auto"
-                        />
-                        <InputForm
-                            lable="Color"
-                            register={register}
-                            errors={errors}
-                            id="color"
-                            validate={{ required: 'Need fill this field' }}
-                            fullWidth
-                            placeholder="Color of new product"
                             style="flex-auto"
                         />
                     </div>

@@ -10,6 +10,10 @@ let hour = 23,
 
 (async () => {
     dealdaily = await Product.aggregate([{ $sample: { size: 1 } }]);
+    if (dealdaily[0]) {
+        dealdaily[0].sale = 10;
+        await Product.findByIdAndUpdate(dealdaily[0]._id, { $set: { sale: 10 } });
+    }
 })();
 
 setInterval(() => {
@@ -28,7 +32,12 @@ setInterval(() => {
 }, 1000);
 
 setInterval(async () => {
+    await Product.findByIdAndUpdate(dealdaily[0]._id, { $set: { sale: 0 } });
     dealdaily = await Product.aggregate([{ $sample: { size: 1 } }]);
+    if (dealdaily[0]) {
+        dealdaily[0].sale = 10;
+        await Product.findByIdAndUpdate(dealdaily[0]._id, { $set: { sale: 10 } });
+    }
     (hour = 23), (minutes = 59), (second = 59);
     setInterval(() => {
         if (second > 0) {
@@ -47,11 +56,10 @@ setInterval(async () => {
 }, 24 * 60 * 60 * 1000);
 
 const createProduct = asyncHandler(async (req, res) => {
-    const { title, price, description, brand, category, color } = req.body;
+    const { title, price, description, brand, category } = req.body;
     const thumb = req?.files?.thumb[0]?.path;
     const images = req?.files?.images?.map(el => el.path);
-    if (!(title && price && description && brand && category && color))
-        throw new Error('Missing input');
+    if (!(title && price && description && brand && category)) throw new Error('Missing input');
     req.body.slug = slugify(title);
     req.body.description = req.body.description.split('.');
     if (thumb) req.body.thumb = thumb;
@@ -156,7 +164,8 @@ const updateProduct = asyncHandler(async (req, res) => {
         delete req.body.images;
         req.body.images = files?.images.map(el => el.path);
     }
-    if (req.body.title) req.body.slug = slugify(req.body.title);
+    if (req.body.description) req.body.description = req.body.description.split('.');
+    if (typeof req.body.title === 'string') req.body.slug = slugify(req.body.title);
     const product = await Product.findByIdAndUpdate(pid, req.body, { new: true });
     return res.status(201).json({
         success: product ? true : false,

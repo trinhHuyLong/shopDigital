@@ -17,6 +17,7 @@ import { getCurrent } from '../../redux/user/asyncAction';
 import { current } from '@reduxjs/toolkit';
 import Swal from 'sweetalert2';
 import path from '../../utils/path';
+import clsx from 'clsx';
 
 const settings = {
     dots: false,
@@ -63,7 +64,7 @@ const DetailProd = () => {
     const { current } = useSelector(state => state.user);
     const [product, setProduct] = useState(null);
     const [products, setProducts] = useState(null);
-    const [quantity, setQuantity] = useState('1');
+    const [quantity, setQuantity] = useState('');
     const { id, title, category } = useParams();
     const [currentImg, setCurrentImg] = useState(null);
     const navigate = useNavigate();
@@ -97,38 +98,44 @@ const DetailProd = () => {
                 if (rs.isConfirmed) navigate(`${path.LOGIN}`);
             });
         }
-        const response = await apiUpdateCart({
-            pid: product._id,
-            color: product.color,
-            quantity,
-        });
-        if (response.success) {
-            toast.success('Upadate cart success');
-            dispatch(getCurrent());
-        } else toast.error('fail');
+        if (product.quantity > 0) {
+            const response = await apiUpdateCart({
+                pid: product._id,
+                color: product.color,
+                quantity,
+            });
+            if (response.success) {
+                toast.success('Upadate cart success');
+                dispatch(getCurrent());
+            } else toast.error('fail');
+        }
     };
 
     const handleChangeImg = e => {
         setCurrentImg(e.target.src);
     };
 
-    const handleQuantity = useCallback(
-        number => {
-            if (number === '') {
-                setQuantity('');
-                return;
-            }
-            if (!Number(number) || number < 1) return;
-            setQuantity(number);
-        },
-        [quantity]
-    );
+    const handleQuantity = number => {
+        if (number === '') {
+            setQuantity('');
+            return;
+        }
+        if (!Number(number) || number < 1) return;
+
+        if (number > product?.quantity) {
+            toast.info('sold off');
+            return;
+        }
+        setQuantity(number);
+    };
 
     useEffect(() => {
         if (id) {
+            setQuantity('');
             fetchProductData(id);
             fetchProducts(id);
         }
+
         window.scrollTo(0, 0);
     }, [id]);
 
@@ -185,7 +192,7 @@ const DetailProd = () => {
                         <span className="text-sm text-main italic">(Sold: {product?.sold})</span>
                     </div>
                     <ul className="text-sm text-gray-500 !list-square list-inside">
-                        {product?.description.length > 1 &&
+                        {product?.description &&
                             product?.description.map(el => (
                                 <li className="leading-6" key={el}>
                                     {el}
@@ -199,7 +206,12 @@ const DetailProd = () => {
                         </div>
                         <button
                             onClick={() => handleAddCart()}
-                            className="w-full bg-main text-gray-100 py-2"
+                            className={clsx(
+                                product?.quantity === 0 &&
+                                    'w-full bg-gray-400 hover:cursor-default text-gray-100 py-2',
+                                product?.quantity > 0 &&
+                                    'w-full bg-main hover:opacity-80 hover:cursor-pointer text-gray-100 py-2'
+                            )}
                         >
                             Add to cart
                         </button>

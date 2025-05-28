@@ -2,6 +2,7 @@ import { AiFillDashboard } from 'react-icons/ai';
 import { MdGroup } from 'react-icons/md';
 import { TbBrandProducthunt } from 'react-icons/tb';
 import { RiBillLine } from 'react-icons/ri';
+import { MdCategory } from 'react-icons/md';
 
 import path from './path';
 
@@ -190,6 +191,23 @@ export const adminSidebar = [
     },
     {
         id: 4,
+        type: 'parent',
+        text: 'Manage category',
+        path: `/${path.ADMIN}/${path.MANAGE_CATEGORY}`,
+        icon: <MdCategory size={20} />,
+        submenu: [
+            {
+                text: 'Create category',
+                path: `/${path.ADMIN}/${path.CREATE_CATEGORY}`,
+            },
+            {
+                text: 'Manage category',
+                path: `/${path.ADMIN}/${path.MANAGE_CATEGORY}`,
+            },
+        ],
+    },
+    {
+        id: 5,
         type: 'single',
         text: 'Manage orders',
         path: `/${path.ADMIN}/${path.MANAGE_ORDERS}`,
@@ -217,13 +235,6 @@ export const memberSidebar = [
         type: 'single',
         text: 'Buy history',
         path: `/${path.MEMBER}/${path.HISTORY}`,
-        icon: <RiBillLine size={20} />,
-    },
-    {
-        id: 4,
-        type: 'single',
-        text: 'Wishlist',
-        path: `/${path.MEMBER}/${path.WISHLIST}`,
         icon: <RiBillLine size={20} />,
     },
 ];

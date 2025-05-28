@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { InputForm } from '../../components';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,9 +8,13 @@ import { apiUpdateCurrent } from '../../apis';
 import moment from 'moment';
 import avatarDefault from '../../assets/avatarDefault.svg';
 import { getCurrent } from '../../redux/user/asyncAction';
+import { useState } from 'react';
 
 const Persional = () => {
+    const [avatar, setAvatar] = useState('');
+    const { current } = useSelector(state => state.user);
     const dispatch = useDispatch();
+
     const handleUpdateInfor = async data => {
         const formData = new FormData();
         if (data?.avatar) {
@@ -29,20 +33,31 @@ const Persional = () => {
             toast.error(response.mes);
         }
     };
+
     const {
         register,
         formState: { errors, isDirty },
         handleSubmit,
         reset,
+        watch,
     } = useForm();
-    const { current } = useSelector(state => state.user);
+
+    useEffect(() => {
+        if (watch('avatar') instanceof File) {
+            const url = URL.createObjectURL(watch('avatar')?.[0]);
+            setAvatar(url);
+            return () => {
+                URL.revokeObjectURL(url);
+            };
+        }
+    }, [watch('avatar')]);
     useEffect(() => {
         reset({
             name: current?.name,
             mobile: current?.mobile,
-            email: current?.email,
             avatar: current?.avatar,
         });
+        setAvatar(current?.avatar || avatarDefault);
     }, [current]);
     return (
         <div className="w-full relative px-10 py-5">
@@ -63,77 +78,80 @@ const Persional = () => {
             </div>
             <form
                 onSubmit={handleSubmit(handleUpdateInfor)}
-                className="w-full mx-auto py-8 flex flex-col gap-4"
+                className="w-full flex flex-col gap-4 mx-auto py-8 "
             >
-                <InputForm
-                    lable="Name"
-                    register={register}
-                    errors={errors}
-                    id="name"
-                    validate={{ required: 'Need fill this field' }}
-                    fullWidth
-                    placeholder="Enter your name..."
-                />
-                <InputForm
-                    lable="Email"
-                    register={register}
-                    errors={errors}
-                    id="email"
-                    validate={{
-                        required: 'Need fill this field',
-                        pattern: {
-                            value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
-                            message: 'phone number invalid',
-                        },
-                    }}
-                    fullWidth
-                    placeholder="Enter your email..."
-                />
-                <InputForm
-                    lable="Phone"
-                    register={register}
-                    errors={errors}
-                    id="mobile"
-                    validate={{
-                        required: 'Need fill this field',
-                        pattern: {
-                            value: /^(\+84|0)(3|5|7|8|9)\d{8}$/,
-
-                            message: 'phone number invalid',
-                        },
-                    }}
-                    fullWidth
-                    placeholder="Enter your phone..."
-                />
-                <div className="flex items-center gap-2">
-                    <span className="font-medium">Accont status:</span>
-                    <span>{current?.isBlocked ? 'Blocked' : 'Active'}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                    <span className="font-medium">Role:</span>
-                    <span>{current?.role}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                    <span className="font-medium">Created at:</span>
-                    <span>{moment(current?.createdAt).fromNow()}</span>
-                </div>
-                <div className="flex flex-col gap-2">
-                    <span className="font-medium">Profile image:</span>
-                    <label htmlFor="file">
-                        <img
-                            src={current?.avatar || avatarDefault}
-                            className="w-20 h-20 object-cover rounded-lg ml-8"
+                <div className="flex gap-4">
+                    <div className="flex flex-col gap-4 w-[60%]">
+                        <div className="flex gap-4 items-center ">
+                            <span className="text-sm font-semibold text-gray-700 py-2">Email:</span>
+                            <span className="py-2">{current.email}</span>
+                        </div>
+                        <InputForm
+                            lable="Name"
+                            register={register}
+                            errors={errors}
+                            id="name"
+                            validate={{ required: 'Need fill this field' }}
+                            fullWidth
+                            placeholder="Enter your name..."
                         />
-                    </label>
-                    <input id="file" type="file" hidden {...register('avatar')} />
+
+                        <InputForm
+                            lable="Phone"
+                            register={register}
+                            errors={errors}
+                            id="mobile"
+                            validate={{
+                                pattern: {
+                                    value: /^(\+84|0)(3|5|7|8|9)\d{8}$/,
+
+                                    message: 'phone number invalid',
+                                },
+                            }}
+                            fullWidth
+                            placeholder="Enter your phone..."
+                        />
+                        <div className="flex items-center gap-2">
+                            <span className="font-medium">Accont status:</span>
+                            <span>{current?.isBlocked ? 'Blocked' : 'Active'}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <span className="font-medium">Role:</span>
+                            <span>{current?.role}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <span className="font-medium">Created at:</span>
+                            <span>{moment(current?.createdAt).fromNow()}</span>
+                        </div>
+                    </div>
+                    <div className="flex flex-1 border-l">
+                        <div className="flex gap-2 items-center w-full justify-center">
+                            <div>
+                                <label
+                                    htmlFor="file"
+                                    className="flex flex-col items-center justify-center"
+                                >
+                                    <img
+                                        src={avatar}
+                                        className="w-[200px] h-[200px] object-cover rounded-lg"
+                                    />
+
+                                    <span className="px-4 py-2 border mt-4 hover:bg-gray-300">
+                                        Select Avatar
+                                    </span>
+                                </label>
+                                <input id="file" type="file" hidden {...register('avatar')} />
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 {isDirty && (
-                    <div className="flex justify-center">
+                    <div className="flex justify-start mt-5">
                         <button
-                            className="bg-main text-white px-4 py-2 hover:opacity-80 rounded-md w-[50%]"
+                            className="bg-main text-white px-4 py-2 hover:opacity-80 rounded-md w-[20%]"
                             type="submit"
                         >
-                            Update information
+                            save
                         </button>
                     </div>
                 )}
