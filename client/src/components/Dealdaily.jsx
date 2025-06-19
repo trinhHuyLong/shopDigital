@@ -16,8 +16,6 @@ const DealDaily = () => {
     const price = Number(dealdaily?.price) || 0;
     const sale = Number(dealdaily?.sale) || 0;
 
-    console.log(sale, price);
-
     const fetchDealDaily = async () => {
         const response = await apiDealDaily();
         if (response?.success) {
