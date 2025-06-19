@@ -15,27 +15,20 @@ const ManageUser = () => {
         handleSubmit,
         formState: { errors },
         reset,
-    } = useForm({
-        email: '',
-        name: '',
-        role: '',
-        mobile: '',
-        isBlocked: '',
-    });
+    } = useForm();
+
     const navigate = useNavigate();
     const [users, setUsers] = useState([]);
     const [edit, setEdit] = useState(null);
     const [search, setSearch] = useState('');
     const [params] = useSearchParams();
+
     const fetchUsers = async params => {
         const response = await apiGetAllUsers(params);
-        if (response.success) {
-            setUsers(response);
-        }
+        if (response.success) setUsers(response);
     };
 
     const handleDelete = uid => {
-        console.log(uid);
         Swal.fire({
             title: 'Are you sure?',
             text: 'Are you sure you want to delete this user?',
@@ -68,14 +61,11 @@ const ManageUser = () => {
 
     useEffect(() => {
         const param = Object.fromEntries([...params]);
-        if (searchDebounce) {
-            param.search = searchDebounce;
-        } else {
-            delete param.search;
-        }
-        if (!param.page) {
-            param.page = 1;
-        }
+        if (searchDebounce) param.search = searchDebounce;
+        else delete param.search;
+
+        if (!param.page) param.page = 1;
+
         navigate({
             pathname: `/admin/manage-users`,
             search: createSearchParams(param).toString(),
@@ -94,180 +84,119 @@ const ManageUser = () => {
             });
         }
     }, [edit]);
+
     return (
-        <div className={clsx('w-full', edit && 'pl-10')}>
-            <h1 className="h-[75px] flex items-center justify-between px-4 text-3xl font-bold border-b">
-                Manege users
-            </h1>
-            <div className="w-full p-4">
-                <div className="flex justify-end py-4">
-                    <div className="w-[50%]">
-                        <Inputfield
-                            nameKey="Search name or mail user"
-                            value={search}
-                            setValue={setSearch}
-                            isHideLable={true}
-                        />
-                    </div>
+        <div className={clsx('w-full px-6 pb-16')}>
+            <h1 className="text-3xl font-bold border-b py-6">Manage Users</h1>
+            <div className="flex justify-end my-4">
+                <div className="w-full max-w-md">
+                    <Inputfield
+                        nameKey="Search name or mail user"
+                        value={search}
+                        setValue={setSearch}
+                        isHideLable={true}
+                    />
                 </div>
-                <form onSubmit={handleSubmit(handleUpdate)}>
-                    <table className="table-auto mb-6 text-left w-full">
-                        <thead className="font-bold bg-gray-700 text-[13px] text-white">
-                            <tr className=" border border-gray-500">
-                                <th className="px-4 py-2">#</th>
-                                <th className="px-4 py-2">Email address</th>
-                                <th className="px-4 py-2">Name</th>
-                                <th className="px-4 py-2">Role</th>
-                                <th className="px-4 py-2">Phone</th>
-                                <th className="px-4 py-2">Status</th>
-                                <th className="px-4 py-2">Created at</th>
-                                <th className="px-4 py-2">Actions</th>
+            </div>
+            <form onSubmit={handleSubmit(handleUpdate)}>
+                <div className="overflow-x-auto bg-white shadow-md rounded-md">
+                    <table className="min-w-full text-sm text-left table-fixed">
+                        <thead className="bg-blue-900 text-white">
+                            <tr>
+                                <th className="w-[40px] px-2 py-3">#</th>
+                                <th className="w-[200px] px-2 py-3">Email</th>
+                                <th className="w-[160px] px-2 py-3">Name</th>
+                                <th className="w-[120px] px-2 py-3">Role</th>
+                                <th className="w-[140px] px-2 py-3">Phone</th>
+                                <th className="w-[120px] px-2 py-3">Status</th>
+                                <th className="w-[140px] px-2 py-3">Created At</th>
+                                <th className="w-[120px] px-2 py-3">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {users?.users?.map((user, id) => (
-                                <tr key={user._id} className="border border-gray-500 ">
-                                    <td className="px-4 py-2">
+                                <tr key={user._id} className="border-b hover:bg-gray-50">
+                                    <td className="px-2 py-2">
                                         {!params.get('page')
                                             ? id + 1
                                             : (+params.get('page') - 1) * 12 + id + 1}
                                     </td>
-                                    <td className="px-4 py-2">
-                                        {edit?._id === user._id ? (
-                                            <InputForm
-                                                fullWidth
-                                                defaultValue={edit.email}
-                                                register={register}
-                                                errors={errors}
-                                                id={'email'}
-                                                validate={{
-                                                    required: 'Required fill',
-                                                    pattern: {
-                                                        value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                                                        message: 'Invalid email address',
-                                                    },
-                                                }}
-                                            />
-                                        ) : (
-                                            <span>{user.email}</span>
-                                        )}
-                                    </td>
-                                    <td className="px-4 py-2">
-                                        {edit?._id === user._id ? (
-                                            <InputForm
-                                                fullWidth
-                                                defaultValue={edit.name}
-                                                register={register}
-                                                errors={errors}
-                                                id={'name'}
-                                                validate={{ required: 'Required fill' }}
-                                            />
-                                        ) : (
-                                            <span>{user.name}</span>
-                                        )}
-                                    </td>
-                                    <td className="px-4 py-2">
+                                    <td className="px-2 py-2 truncate">{user.email}</td>
+                                    <td className="px-2 py-2 truncate">{user.name}</td>
+                                    <td className="px-2 py-2 truncate">
                                         {edit?._id === user._id ? (
                                             <Select
-                                                fullWidth
+                                                fullWidth={false}
                                                 defaultValue={edit.role}
                                                 register={register}
                                                 errors={errors}
                                                 id={'role'}
-                                                validate={{ required: 'Required fill' }}
                                                 options={[
-                                                    {
-                                                        code: 'admin',
-                                                        value: 'Admin',
-                                                    },
-                                                    {
-                                                        code: 'user',
-                                                        value: 'User',
-                                                    },
+                                                    { code: 'admin', value: 'Admin' },
+                                                    { code: 'user', value: 'User' },
                                                 ]}
+                                                validate={{ required: 'Required fill' }}
                                             />
                                         ) : (
-                                            <span>{user.role}</span>
+                                            user.role
                                         )}
                                     </td>
-                                    <td className="px-4 py-2">
-                                        {edit?._id === user._id ? (
-                                            <InputForm
-                                                fullWidth
-                                                defaultValue={'0123456789'}
-                                                register={register}
-                                                errors={errors}
-                                                id={'mobile'}
-                                                validate={{
-                                                    required: 'Required fill',
-                                                    pattern: {
-                                                        value: /^[0-9]{10}$/,
-                                                        message: 'Invalid phone number',
-                                                    },
-                                                }}
-                                            />
-                                        ) : (
-                                            <span>{!user.mobile ? 'Update now' : user.mobile}</span>
-                                        )}
-                                    </td>
-                                    <td className="p-4 py-2">
+                                    <td className="px-2 py-2 truncate">{user.mobile || 'N/A'}</td>
+                                    <td className="px-2 py-2 truncate">
                                         {edit?._id === user._id ? (
                                             <Select
-                                                fullWidth
-                                                defaultValue={edit.isBlocked}
+                                                fullWidth={false}
+                                                defaultValue={edit.isBlocked.toString()}
                                                 register={register}
                                                 errors={errors}
                                                 id={'isBlocked'}
                                                 options={[
-                                                    {
-                                                        code: 'true',
-                                                        value: 'Blocked',
-                                                    },
-                                                    {
-                                                        code: 'false',
-                                                        value: 'Active',
-                                                    },
+                                                    { code: 'true', value: 'Blocked' },
+                                                    { code: 'false', value: 'Active' },
                                                 ]}
                                                 validate={{ required: 'Required fill' }}
                                             />
+                                        ) : user.isBlocked ? (
+                                            'Blocked'
                                         ) : (
-                                            <span>{user.isBlocked ? 'Blocked' : 'Active'}</span>
+                                            'Active'
                                         )}
                                     </td>
-                                    <td className="px-4 py-2">
+                                    <td className="px-2 py-2">
                                         {new Date(user.createdAt).toLocaleDateString()}
                                     </td>
-                                    <td className="px-4 py-2">
-                                        <div className="flex">
+                                    <td className="px-2 py-2">
+                                        <div className="flex gap-1">
                                             {edit?._id === user._id ? (
-                                                <button
-                                                    type="submit"
-                                                    className="pr-2 text-orange-500 hover:underline cursor-pointer h-full"
-                                                >
-                                                    Update
-                                                </button>
+                                                <>
+                                                    <button
+                                                        type="submit"
+                                                        className="text-green-600 hover:underline"
+                                                    >
+                                                        Update
+                                                    </button>
+                                                    <span
+                                                        className="text-gray-500 hover:underline"
+                                                        onClick={() => setEdit(null)}
+                                                    >
+                                                        Cancel
+                                                    </span>
+                                                </>
                                             ) : (
-                                                <span
-                                                    onClick={() => setEdit(user)}
-                                                    className="pr-2 text-orange-500 hover:underline cursor-pointer"
-                                                >
-                                                    Edit
-                                                </span>
-                                            )}
-                                            {edit?._id === user._id ? (
-                                                <span
-                                                    className="pl-2 text-orange-500 hover:underline cursor-pointer"
-                                                    onClick={() => setEdit(null)}
-                                                >
-                                                    Cancel
-                                                </span>
-                                            ) : (
-                                                <span
-                                                    onClick={() => handleDelete(user._id)}
-                                                    className="pl-2 text-orange-500 hover:underline cursor-pointer"
-                                                >
-                                                    Delete
-                                                </span>
+                                                <>
+                                                    <span
+                                                        onClick={() => setEdit(user)}
+                                                        className="text-blue-600 hover:underline"
+                                                    >
+                                                        Edit
+                                                    </span>
+                                                    <span
+                                                        onClick={() => handleDelete(user._id)}
+                                                        className="text-red-600 hover:underline"
+                                                    >
+                                                        Delete
+                                                    </span>
+                                                </>
                                             )}
                                         </div>
                                     </td>
@@ -275,13 +204,13 @@ const ManageUser = () => {
                             ))}
                         </tbody>
                     </table>
-                </form>
-                {users?.counts > 12 && (
-                    <div className="w-full m-auto my-4 flex justify-center">
-                        <Pagination totalCount={users?.counts} />
-                    </div>
-                )}
-            </div>
+                </div>
+            </form>
+            {users?.counts > 12 && (
+                <div className="w-full mt-6 flex justify-center">
+                    <Pagination totalCount={users?.counts} />
+                </div>
+            )}
         </div>
     );
 };

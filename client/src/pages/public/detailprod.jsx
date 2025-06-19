@@ -136,7 +136,10 @@ const DetailProd = () => {
             fetchProducts(id);
         }
 
-        window.scrollTo(0, 0);
+        const ids = setTimeout(() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 100);
+        return () => clearTimeout(ids);
     }, [id]);
 
     const handleSubmitVote = useCallback(() => {

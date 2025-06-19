@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { ProductCard } from '../components';
+import { ProductCard } from '.';
 import { apiGetProducts } from '../apis/product';
 
 const FeatureProducts = () => {

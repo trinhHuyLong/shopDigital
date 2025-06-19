@@ -43,8 +43,9 @@ const Persional = () => {
     } = useForm();
 
     useEffect(() => {
-        if (watch('avatar') instanceof File) {
-            const url = URL.createObjectURL(watch('avatar')?.[0]);
+        const file = watch('avatar')?.[0];
+        if (file instanceof File) {
+            const url = URL.createObjectURL(file);
             setAvatar(url);
             return () => {
                 URL.revokeObjectURL(url);

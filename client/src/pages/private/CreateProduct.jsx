@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import { InputForm, Select, Loading } from '../../components';
+import { InputForm, Select, Loading, MarkdownEditor } from '../../components';
 import { validate, fileToBase64 } from '../../utils/helper';
 import { apiCreateProduct } from '../../apis/product';
 import { showModal } from '../../redux/app/appSlice';
@@ -153,7 +153,7 @@ const CreateProduct = () => {
                             fullWidth
                         />
                     </div>
-                    <InputForm
+                    <MarkdownEditor
                         lable="Description"
                         register={register}
                         errors={errors}

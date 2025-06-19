@@ -24,6 +24,7 @@ const InputField = ({
                 className="px-4 py-2 rounded-sm border w-full mt-2 placeholder:text-sm placeholder:italic outline-none"
                 placeholder={placeholder || nameKey?.slice(0, 1).toUpperCase() + nameKey?.slice(1)}
                 value={value}
+                name={placeholder || nameKey.split(' ')[0]}
                 onChange={e => setValue(e.target.value)}
                 onFocus={() => {
                     setIsFocused(true);

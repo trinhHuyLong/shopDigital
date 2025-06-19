@@ -44,7 +44,6 @@ const UpdateProduc = ({ editProduct, render, setEditProduct }) => {
             }
             const formData = new FormData();
             const finalPayload = { ...data };
-            console.log(finalPayload);
             for (let i of Object.entries(finalPayload)) {
                 formData.append(i[0], i[1]);
             }
@@ -53,7 +52,6 @@ const UpdateProduc = ({ editProduct, render, setEditProduct }) => {
                 formData.append('thumb', finalPayload.thumb[0]);
             } else {
                 formData.delete('thumb');
-                console.log(preview?.thumb);
                 formData.append('thumb', preview?.thumb);
             }
             if (finalPayload.images) {
@@ -61,7 +59,6 @@ const UpdateProduc = ({ editProduct, render, setEditProduct }) => {
                 formData.delete('images');
                 for (let image of finalPayload.images) formData.append('images', image);
             } else {
-                console.log(preview?.images);
                 formData.delete('images');
                 if (preview?.images?.length > 0) {
                     preview.images.forEach(img => {
@@ -75,6 +72,7 @@ const UpdateProduc = ({ editProduct, render, setEditProduct }) => {
             if (response.success) {
                 toast.success('Create product successful');
                 reset();
+                render();
                 setPreview({
                     thumb: null,
                     images: [],

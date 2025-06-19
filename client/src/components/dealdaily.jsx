@@ -5,7 +5,7 @@ import { FaStar } from 'react-icons/fa6';
 
 import { apiDealDaily } from '../apis/product';
 import { formatMoney } from '../utils/helper';
-import { CountDown } from '../components/index';
+import { CountDown } from './index';
 
 const DealDaily = () => {
     const navigate = useNavigate();
@@ -79,8 +79,7 @@ const DealDaily = () => {
                     className="w-full object-contain"
                 />
                 <span className="line-clamp-1">{dealdaily?.title}</span>
-                <span className="line-through">{`${formatMoney(dealdaily?.price)} VND`}</span>
-                <span className="">{`${formatMoney((price / 100) * (100 - sale))} VND`}</span>
+                <span className="">{`${formatMoney(dealdaily?.price)} VND`}</span>
             </div>
             <div className="px-4 mt-8">
                 <div className="flex justify-center items-center gap-2 mb-4">

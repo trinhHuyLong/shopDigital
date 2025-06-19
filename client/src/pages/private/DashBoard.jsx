@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo, useLayoutEffect } from 'react';
 import { apiGetOderInMonth, apiGetOders } from '../../apis';
 import { formatMoney } from '../../utils/helper';
+import avatarDefault from '../../assets/avatarDefault.svg';
 
 const DashBoard = () => {
     const [ordersInMonth, setOrdersInMonth] = useState([]);
@@ -55,8 +56,6 @@ const DashBoard = () => {
             .sort((a, b) => b.totalQuantity - a.totalQuantity)
             .slice(0, 5);
     }, [ordersInMonth]);
-
-    console.log(topProducts);
 
     const fetchOrders = async () => {
         setLoading(true);
@@ -132,7 +131,7 @@ const DashBoard = () => {
                                             <tr key={id}>
                                                 <td className="px-4 py-3 flex gap-2 items-center">
                                                     <img
-                                                        src={el.avatar}
+                                                        src={el.avatar || avatarDefault}
                                                         className="w-8 h-8 rounded-full"
                                                     />
                                                     <div className="flex flex-col">

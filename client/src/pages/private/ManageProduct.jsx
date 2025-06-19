@@ -60,8 +60,8 @@ const ManageProduct = () => {
 
     useEffect(() => {
         const searchParams = Object.fromEntries([...params]);
-
         fetchProduct({ ...searchParams, q: queryDebounce, limit: 12 });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [params, update]);
 
     useEffect(() => {
@@ -97,57 +97,70 @@ const ManageProduct = () => {
                     />
                 </form>
             </div>
-            <table>
-                <thead>
-                    <tr className="border bg-sky-900 text-white  border-gray-700 py-2">
-                        <th className="py-2 pl-2 text-left">#</th>
-                        <th className="py-2 text-left">Thumb</th>
-                        <th className="py-2 text-left">Title</th>
-                        <th className="py-2 text-left">Brand</th>
-                        <th className="py-2 text-left">Category</th>
-                        <th className="py-2 text-left">Price</th>
-                        <th className="py-2 text-left">Quantity</th>
-                        <th className="py-2 text-left">Sold</th>
-                        <th className="py-2 text-left">Ratings</th>
-                        <th className="py-2 text-left">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {product?.map((el, id) => (
-                        <tr key={id}>
-                            <td className="py-2 pl-2">
-                                {!params.get('page')
-                                    ? id + 1
-                                    : (+params.get('page') - 1) * 12 + id + 1}
-                            </td>
-                            <td className="py-2">
-                                <img src={el.thumb} className="w-12 h-12 object-cover" />
-                            </td>
-                            <td className="py-2">{el.title}</td>
-                            <td className="py-2">{el.brand}</td>
-                            <td className="py-2">{el.category}</td>
-                            <td className="py-2">{el.price}</td>
-                            <td className="py-2">{el.quantity}</td>
-                            <td className="py-2">{el.sold}</td>
-                            <td className="py-2">{el.totalRatings}</td>
-                            <td>
-                                <span
-                                    onClick={() => setEditProduct(el)}
-                                    className="text-blue-500 hover:underline cursor-pointer px-1"
-                                >
-                                    Edit
-                                </span>
-                                <span
-                                    onClick={() => handleDeleteProduct(el._id)}
-                                    className="text-blue-500 hover:underline cursor-pointer px-1"
-                                >
-                                    Remove
-                                </span>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            <div className="p-6 bg-gray-100 min-h-screen">
+                <div className="max-w-7xl mx-auto bg-white p-6 rounded-2xl shadow-md">
+                    <div className="overflow-auto rounded-lg shadow">
+                        <table className="min-w-full text-sm text-left text-gray-700">
+                            <thead className="bg-blue-900 text-white">
+                                <tr>
+                                    <th className="px-4 py-3">#</th>
+                                    <th className="px-4 py-3">Thumb</th>
+                                    <th className="px-4 py-3">Title</th>
+                                    <th className="px-4 py-3">Brand</th>
+                                    <th className="px-4 py-3">Category</th>
+                                    <th className="px-4 py-3">Price</th>
+                                    <th className="px-4 py-3">Quantity</th>
+                                    <th className="px-4 py-3">Sold</th>
+                                    <th className="px-4 py-3">Ratings</th>
+                                    <th className="px-4 py-3">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-200">
+                                {product &&
+                                    product?.map((el, id) => (
+                                        <tr className="hover:bg-gray-50" key={el._id}>
+                                            <td className="px-4 py-3">
+                                                {!params.get('page')
+                                                    ? id + 1
+                                                    : (+params.get('page') - 1) * 12 + id + 1}
+                                            </td>
+                                            <td className="px-4 py-3">
+                                                <img
+                                                    src={el?.thumb}
+                                                    className="w-12 h-12 rounded object-cover"
+                                                    alt="Product"
+                                                />
+                                            </td>
+                                            <td className="px-4 py-3">{el.title}</td>
+                                            <td className="px-4 py-3">{el.brand}</td>
+                                            <td className="px-4 py-3">{el.category}</td>
+                                            <td className="px-4 py-3">{el.price}</td>
+                                            <td className="px-4 py-3">{el.quantity}</td>
+                                            <td className="px-4 py-3">{el.sold}</td>
+                                            <td className="px-4 py-3">{el.totalRatings}</td>
+                                            <td className="px-4 py-3">
+                                                <div className="flex gap-2">
+                                                    <button
+                                                        onClick={() => setEditProduct(el)}
+                                                        className="text-blue-600 hover:underline"
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                    <button
+                                                        onClick={handleDeleteProduct}
+                                                        className="text-red-600 hover:underline"
+                                                    >
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
             <div className="w-full flex justify-center my-8">
                 <Pagination totalCount={count} page={params.get('page')} />
             </div>

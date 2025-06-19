@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 
-import { Votebar, VoteOption, Comment } from '../components';
+import { Votebar, VoteOption, Comment } from '.';
 import renderStar from '../utils/rederStar';
 import { apiRatingProduct } from '../apis/product';
 import { showModal } from '../redux/app/appSlice';

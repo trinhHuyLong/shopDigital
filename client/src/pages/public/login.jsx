@@ -16,7 +16,7 @@ import path from '../../utils/path';
 import { Loading } from '../../components';
 import { validate } from '../../utils/helper';
 import { login } from '../../redux/user/userSlice';
-import InputField from '../../components/inputfield';
+import { Inputfield } from '../../components';
 import { showModal } from '../../redux/app/appSlice';
 
 const Login = () => {
@@ -192,7 +192,7 @@ const Login = () => {
                         <div className="w-full py-6">
                             <h4>Enter your email of your account:</h4>
                             <div className="my-3">
-                                <InputField
+                                <Inputfield
                                     value={email}
                                     setValue={setEmail}
                                     nameKey={'Email'}
@@ -232,7 +232,7 @@ const Login = () => {
                             <h4>Enter your new password of your account:</h4>
                             <p>{email}</p>
                             <div className="my-3">
-                                <InputField
+                                <Inputfield
                                     value={password}
                                     setValue={setPassword}
                                     nameKey={'Password'}
@@ -241,7 +241,7 @@ const Login = () => {
                                 />
                             </div>
                             <div className="mb-3">
-                                <InputField
+                                <Inputfield
                                     value={confirm}
                                     setValue={setConfirm}
                                     nameKey={'Confirm password'}
@@ -275,7 +275,7 @@ const Login = () => {
                         <div className="w-full py-6">
                             {isRegister && (
                                 <div className="mb-3">
-                                    <InputField
+                                    <Inputfield
                                         value={name}
                                         setValue={setName}
                                         nameKey={'Name'}
@@ -285,7 +285,7 @@ const Login = () => {
                                 </div>
                             )}
                             <div className="mb-3">
-                                <InputField
+                                <Inputfield
                                     value={email}
                                     setValue={setEmail}
                                     nameKey={'Email'}
@@ -294,7 +294,7 @@ const Login = () => {
                                 />
                             </div>
                             <div className="mb-3">
-                                <InputField
+                                <Inputfield
                                     value={password}
                                     setValue={setPassword}
                                     nameKey={'Password'}
@@ -305,7 +305,7 @@ const Login = () => {
                             </div>
                             {isRegister && (
                                 <div className="mb-3">
-                                    <InputField
+                                    <Inputfield
                                         value={confirm}
                                         setValue={setConfirm}
                                         nameKey={'Confirm password'}

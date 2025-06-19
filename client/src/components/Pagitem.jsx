@@ -20,10 +20,14 @@ const Pagitem = ({ item }) => {
         if (Number(item)) {
             queries.page = item;
         }
+
         navigate({
             pathname: location.pathname,
             search: createSearchParams(queries).toString(),
         });
+        setTimeout(() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 100);
     };
     return (
         <button

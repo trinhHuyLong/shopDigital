@@ -62,9 +62,9 @@ const ManageOrder = () => {
                                         className="w-10 h-10 rounded-full"
                                     />
                                     <div className="flex flex-col">
-                                        <span>{el.orderBy.name}</span>
+                                        <span>{el?.orderBy?.name}</span>
                                         <span className="text-[12px] font-normal">
-                                            {el.orderBy.email}
+                                            {el?.orderBy?.email}
                                         </span>
                                     </div>
                                 </div>

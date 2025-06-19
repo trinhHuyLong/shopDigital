@@ -17,21 +17,21 @@ export const navigation = [
         value: 'PRODUCTS',
         path: `/${path.PRODUCTS}`,
     },
-    {
-        id: 3,
-        value: 'BLOGS',
-        path: `/${path.BLOGS}`,
-    },
-    {
-        id: 4,
-        value: 'OUR SERVICES',
-        path: `/${path.OUR_SERVICES}`,
-    },
-    {
-        id: 5,
-        value: 'FAQ',
-        path: `/${path.FAQ}`,
-    },
+    // {
+    //     id: 3,
+    //     value: 'BLOGS',
+    //     path: `home`,
+    // },
+    // {
+    //     id: 4,
+    //     value: 'OUR SERVICES',
+    //     path: `/${path.OUR_SERVICES}`,
+    // },
+    // {
+    //     id: 5,
+    //     value: 'FAQ',
+    //     path: `/${path.FAQ}`,
+    // },
 ];
 
 export const productInforTabs = [

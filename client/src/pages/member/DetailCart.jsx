@@ -6,7 +6,6 @@ import { formatMoney } from '../../utils/helper';
 import { apiUpdateCart, apiRemoveCart, apiCreateOder } from '../../apis';
 import { toast } from 'react-toastify';
 import { getCurrent } from '../../redux/user/asyncAction';
-import product from '../../components/product';
 
 const DetailCart = () => {
     const [quantity, setQuantity] = useState({});

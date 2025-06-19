@@ -84,6 +84,14 @@ const loginUser = asyncHandler(async (req, res) => {
     }
     const user = await User.findOne({ email });
 
+    if (user && user.isBlocked) {
+        return res.status(400).json({
+            success: false,
+            message:
+                'This account has been blocked. Please contact the admin for more information.',
+        });
+    }
+
     if (user && (await user.isCorrectPassword(password))) {
         const { password, role, ...userData } = user.toObject();
         const accessToken = generateAccessToken(user._id, role);
