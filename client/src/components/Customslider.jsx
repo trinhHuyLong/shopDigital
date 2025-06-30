@@ -10,6 +10,15 @@ const settings = {
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1,
+    responsive: [
+        {
+            breakpoint: 768,
+            settings: {
+                slidesToShow: 2,
+                slidesToScroll: 1,
+            },
+        },
+    ],
 };
 
 const CustomSlider = ({ type, products }) => {

@@ -17,15 +17,15 @@ const Product = ({ product, type }) => {
                     onMouseEnter={() => setIsShow(true)}
                     onMouseLeave={() => setIsShow(false)}
                 >
-                    <div className="w-full  flex justify-center">
+                    <div className="w-full flex justify-center">
                         {isShow && (
-                            <div className="absolute inset-0 bg-transparent1 flex justify-center gap-2 animate-slide-fwd-center"></div>
+                            <div className="absolute inset-0 bg-transparent1 flex justify-center gap-2 animate-slide-fwd-center z-49"></div>
                         )}
                         {type && (
                             <img
                                 src={type === 'new' ? label1 : label2}
                                 alt="label"
-                                className="absolute top-[0px] left-[-12px] w-[84px] h-[25px] object-cover"
+                                className="absolute top-[0px] left-[-12px] w-[84px] h-[25px] object-cover z-49"
                             />
                         )}
                         <img
@@ -35,7 +35,7 @@ const Product = ({ product, type }) => {
                                     : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRt7ocNuUgQqYYlmgHTEZIhx5aXBPfybSqneA&s'
                             }
                             alt={product.title}
-                            className="w-[243px] h-[243px] object-cover"
+                            className="lg:w-[243px] lg:h-[243px] object-cover"
                         />
                         {type && (
                             <>

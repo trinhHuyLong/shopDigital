@@ -21,7 +21,6 @@ export const appSlice = createSlice({
         },
 
         showCart: (state, action) => {
-            console.log(action);
             state.isShowCart = state.isShowCart ? false : true;
         },
     },

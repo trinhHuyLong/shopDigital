@@ -11,9 +11,9 @@ const VoteOption = ({ nameProduct, handleVote }) => {
         <div className="h-screen w-screen fixed top-0 left-0 flex items-center justify-center bg-black/50">
             <div
                 onClick={e => e.stopPropagation()}
-                className=" w-[700px] bg-white flex flex-col gap-4  items-center justify-center p-8"
+                className="w-[80%] lg:w-[700px] bg-white flex flex-col gap-4  items-center justify-center p-8"
             >
-                <img src={logo} alt="" className="w-[300px] object-contain my-8" />
+                <img src={logo} alt="" className="w-[300px] object-contain mt-4 lg:my-8" />
                 <h2 className="text-center text-medium text-lg">{`Voting product ${nameProduct}`}</h2>
                 <textarea
                     className="border-black border p-4 w-full"
@@ -23,19 +23,19 @@ const VoteOption = ({ nameProduct, handleVote }) => {
                 ></textarea>
                 <div className="flex flex-col w-full gap-4">
                     <p>How do you feel this product?</p>
-                    <div className="flex items-center gap-4 justify-between">
+                    <div className="flex items-center flex-row gap-4 justify-between">
                         {voteOptions.map(el => (
                             <div
                                 key={el.id}
                                 onClick={() => setVoteStar(el.id)}
-                                className="p-4 flex items-center justify-center flex-col gap-2 w-[100px] h-[100px] bg-gray-200 rounded-lg cursor-pointer hover:bg-gray-300"
+                                className="p-1 lg:p-4 flex items-center justify-center lg:flex-col gap-1 w-[250px] lg:w-[100px] lg:h-[100px] bg-gray-200 rounded-lg cursor-pointer lg:hover:bg-gray-300"
                             >
                                 {Number(voteStar) && voteStar >= el.id ? (
                                     <AiFillStar color="orange" />
                                 ) : (
                                     <AiFillStar color="gray" />
                                 )}
-                                <span className="text-sm">{el.text}</span>
+                                <span className="text-sm hidden lg:block">{el.text}</span>
                             </div>
                         ))}
                     </div>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import 'slick-carousel/slick/slick.css';
@@ -36,6 +36,7 @@ import { showCart } from './redux/app/appSlice';
 
 function App() {
     const { isShowModal, modalChildren, isShowCart } = useSelector(state => state.app);
+    const [isClosing, setIsClosing] = useState(false);
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(getCategories());
@@ -45,14 +46,32 @@ function App() {
         <div className="font-main relative">
             {isShowCart && (
                 <div
-                    onClick={() => dispatch(showCart())}
+                    onClick={() => {
+                        setIsClosing(true);
+                        setTimeout(() => {
+                            dispatch(showCart());
+                            setIsClosing(false);
+                        }, 500);
+                    }}
                     className="absolute inset-0 bg-transparent z-50 flex justify-end"
                 >
-                    <Cart />
+                    <Cart isClosing={isClosing} setIsClosing={setIsClosing} />
                 </div>
             )}
             {isShowModal && <Modal>{modalChildren}</Modal>}
-            <ToastContainer />
+            <ToastContainer
+                position="top-right" // hoặc "bottom-center"
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                className="custom-toast"
+                toastClassName="custom-toast-inner"
+            />
             <Routes>
                 <Route path={path.PUBLIC} element={<Public />}>
                     <Route path={path.HOME} element={<Home />} />

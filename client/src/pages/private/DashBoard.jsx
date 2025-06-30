@@ -15,12 +15,12 @@ const DashBoard = () => {
 
         ordersInMonth?.forEach(order => {
             console.log(order);
-            const id = order.orderBy._id;
+            const id = order?.orderBy?._id;
             if (!customerTotals[id]) {
                 customerTotals[id] = {
-                    name: order.orderBy.name,
-                    email: order.orderBy.email,
-                    avatar: order.orderBy.avatar,
+                    name: order?.orderBy?.name,
+                    email: order?.orderBy?.email,
+                    avatar: order?.orderBy?.avatar,
                     total: 0,
                 };
             }

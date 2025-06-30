@@ -15,7 +15,7 @@ const Navigation = () => {
     }, [query]);
 
     return (
-        <div className="w-main h-[48px] py-2 border-y text-sm flex items-center justify-between">
+        <div className="hidden lg:flex w-main h-[48px] py-2 border-y text-sm items-center justify-between">
             <div>
                 {navigation.map(item => {
                     return (

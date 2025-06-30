@@ -116,19 +116,19 @@ const SearchItem = ({ name, activeClick, handleSetActive, type = 'checkbox' }) =
         <div
             ref={inputQ}
             onClick={() => handleSetActive(name)}
-            className="p-4 cursor-pointer z-50 text-gray-500 text-xs relative border border-gray-400 flex justify-between items-center gap-6"
+            className="px-2 py-4 lg:p-4 cursor-pointer z-49 text-gray-500 text-xs relative border border-gray-400 flex justify-between items-center gap-6"
         >
             <span className="capitalize">{name}</span>
             <IoIosArrowDown size={14} />
             {activeClick === name && (
                 <div
                     onClick={e => e.stopPropagation()}
-                    className="absolute top-[calc(100%+4px)] left-0 w-fit p-4 bg-white border min-w-[150px]"
+                    className="absolute top-[calc(100%+4px)] left-0 w-fit p-4 bg-white border min-w-[150px] z-50"
                 >
                     {type === 'checkbox' && name === 'category' && (
                         <div>
                             <div className="flex flex-col gap-3 mt-4">
-                                {categories.map(el => (
+                                {categories?.map(el => (
                                     <div key={el._id} className="flex items-center gap-4">
                                         <input
                                             id={el.title}

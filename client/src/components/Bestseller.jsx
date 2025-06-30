@@ -14,12 +14,12 @@ const BestSeller = ({ bestSeller, newProducts }) => {
 
     return (
         <div>
-            <div className="flex text-[20px] pb-4 border-b-2 border-main">
-                <div className="ml-[-32px]">
+            <div className="flex text-[20px] pb-4 lg:border-b-2 lg:border-main">
+                <div className="lg:ml-[-32px] w-full flex gap-3 flex-col lg:flex-row">
                     {tabs.map(tab => (
                         <span
                             key={tab.id}
-                            className={`font-semibold px-8 cursor-pointer uppercase border-r text-gray-400 ${
+                            className={`font-semibold lg:px-8 cursor-pointer uppercase border-b lg:border-r lg:border-b-0 text-gray-400 ${
                                 activeTab === tab.id ? 'text-gray-900' : ''
                             }`}
                             onClick={() => setActiveTab(tab.id)}
@@ -35,7 +35,7 @@ const BestSeller = ({ bestSeller, newProducts }) => {
                     products={activeTab === 0 ? bestSeller : newProducts}
                 />
             </div>
-            <div className="w-full flex gap-4 mt-4">
+            <div className="w-full flex flex-col lg:flex-row gap-4 mt-4">
                 <img src={b1} alt="" className="flex-1 object-contain" />
                 <img src={b2} alt="" className="flex-1 object-contain" />
             </div>

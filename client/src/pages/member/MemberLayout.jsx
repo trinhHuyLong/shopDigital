@@ -12,10 +12,10 @@ const MemberLayout = () => {
     }
     return (
         <div className="flex w-full bg-white min-h-screen">
-            <div className="w-[327px] flex-none fixed top-0 bottom-0">
+            <div className="hidden lg:block w-[327px] flex-none fixed top-0 bottom-0">
                 <MemberSideBar />
             </div>
-            <div className="w-[327px]"></div>
+            <div className="w-[327px] hidden lg:block"></div>
             <div className="flex-auto">
                 <Outlet />
             </div>

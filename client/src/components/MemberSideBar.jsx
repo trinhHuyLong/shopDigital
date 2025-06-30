@@ -1,6 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { AiOutlineCaretDown, AiOutlineCaretRight } from 'react-icons/ai';
+import { IoMdClose } from 'react-icons/io';
 import clsx from 'clsx';
 
 import avatar from '../assets/avatarDefault.svg';
@@ -11,11 +12,14 @@ const activeStyle = 'px-4 py-2 flex items-center gap-2  bg-main text-white';
 const notActiveStyle =
     'px-4 py-2 flex items-center gap-2  hover:bg-main hover:opacity-80 hover:text-white';
 
-const MemberSideBar = () => {
+const MemberSideBar = ({ handleClose }) => {
     const [open, setOpen] = useState(false);
     const { current } = useSelector(state => state.user);
     return (
         <div className="bg-gray-100 h-full py-4 font-sm">
+            <div className="lg:hidden absolute top-4 right-4" onClick={handleClose}>
+                <IoMdClose size={28} />
+            </div>
             <div className="flex flex-col items-center justify-center gap-2 py-4">
                 <div
                     to="/"

@@ -9,8 +9,9 @@ import { toast } from 'react-toastify';
 import { getCurrent } from '../redux/user/asyncAction';
 import { useNavigate } from 'react-router-dom';
 import path from '../utils/path';
+import clsx from 'clsx';
 
-const Cart = () => {
+const Cart = ({ isClosing, setIsClosing }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { current } = useSelector(state => state.user);
@@ -24,11 +25,23 @@ const Cart = () => {
     return (
         <div
             onClick={e => e.stopPropagation()}
-            className="fixed top-0 bottom-0 right-0 w-[400px] h-screen bg-black grid grid-rows-10 text-white p-6"
+            className={clsx(
+                'fixed top-0 bottom-0 right-0 lg:w-[400px] w-[85%] h-screen bg-black grid grid-rows-10 text-white p-6',
+                isClosing ? 'animate-slide-left1' : 'animate-slide-right1'
+            )}
         >
             <header className="py-4 border-b border-gray-500 row-span-1 h-full flex justify-between items-center font-bold text-2xl">
                 <span>Your cart</span>
-                <span onClick={() => dispatch(showCart())} className="cursor-pointer">
+                <span
+                    onClick={() => {
+                        setIsClosing(true);
+                        setTimeout(() => {
+                            dispatch(showCart());
+                            setIsClosing(false);
+                        }, 500);
+                    }}
+                    className="cursor-pointer"
+                >
                     <IoCloseCircle size={24} />
                 </span>
             </header>

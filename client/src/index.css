@@ -38,6 +38,34 @@
     align-items: center;
 }
 
+.custom-toast {
+    max-width: 350px;
+    top: 10px !important;
+    width: auto !important;
+    box-sizing: border-box;
+    z-index: 9999 !important; /* Đảm bảo toast nổi trên các thành phần khác */
+    position: fixed !important; /* Đảm bảo toast không bị ảnh hưởng bởi cha */
+}
+
+@media (max-width: 600px) {
+    .custom-toast {
+        max-width: 80vw !important;
+        width: 80vw !important;
+        left: 15% !important;
+        font-size: 14px;
+        top: 10px !important;
+        padding: 0 8px;
+        z-index: 9999 !important;
+        position: fixed !important;
+    }
+    .custom-toast-inner {
+        min-height: 40px;
+        padding: 8px 12px;
+        box-sizing: border-box;
+        margin-bottom: 10px !important;
+    }
+}
+
 .imageSlider button.slick-next {
     right: 40px;
     top: 55px;

@@ -26,25 +26,32 @@ function Home() {
         fetchProducts();
     }, []);
     return (
-        <div className="w-main mt-6">
-            <div className="w-main flex">
-                <div className="flex flex-col gap-5 w-[25%] flex-auto">
+        <div className="w-full lg:w-main mt-6">
+            <div className="w-full lg:w-main flex flex-col lg:flex-row gap-5">
+                <div className="flex flex-col gap-5 w-full lg:w-[25%] flex-auto">
+                    <div className="lg:hidden">
+                        <Banner />
+                    </div>
                     <Sidebar />
-                    <DealDaily />
+                    <div className="px-3 lg:px-0 flex-auto">
+                        <DealDaily />
+                    </div>
                 </div>
-                <div className="flex flex-col gap-5 pl-5 w-[75%] flex-auto">
-                    <Banner />
+                <div className="flex flex-col gap-5 lg:px-0 px-3 w-full lg:w-[75%] flex-auto">
+                    <div className="hidden lg:block">
+                        <Banner />
+                    </div>
                     <BestSeller bestSeller={bestSeller} newProducts={newProducts} />
                 </div>
             </div>
             <div className="my-8">
                 <FeatureProducts />
             </div>
-            <div className="my-8">
+            <div className="my-8 px-3 lg:px-0">
                 <h3 className="text-[20px] font-semibold py-[15px] border-b-2 uppercase border-main">
                     HOT COLLECTIONS
                 </h3>
-                <div className="grid grid-cols-3 gap-4 my-4">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 my-4">
                     {categories?.map(item => {
                         if (item.image) {
                             return (

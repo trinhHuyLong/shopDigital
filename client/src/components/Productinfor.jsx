@@ -58,8 +58,8 @@ const ProductInfor = ({ totalRating, ratings, nameProduct, productId, handleSubm
     return (
         <div className="">
             <div>
-                <div className="flex mt-8">
-                    <div className="flex-4 border flex flex-col items-center justify-center">
+                <div className="flex mt-8 flex-col lg:flex-row gap-2">
+                    <div className="flex-4 border flex flex-col items-center justify-center p-2 lg:p-0">
                         <span className="font-semibold text-3xl">{`${totalRating}/5`}</span>
                         <span className="flex">{renderStar(totalRating)}</span>
                         <span className="text-sm">{`${ratings?.length} reviews`}</span>

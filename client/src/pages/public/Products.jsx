@@ -79,15 +79,15 @@ const Products = () => {
     }, [params, category]);
 
     return (
-        <div className="w-full">
-            <div className="h-[81px] flex justify-center items-center bg-gray-100">
-                <div className="w-main">
+        <div className="w-full mt-4 lg:mt-0">
+            <div className="h-[81px] flex justify-center items-center bg-gray-100 px-3 lg:px-0">
+                <div className="w-full lg:w-main">
                     <h3 className="font-semibold uppercase">{!category ? 'products' : category}</h3>
                     <Breadcrumbs category={!category ? 'products' : category} />
                 </div>
             </div>
-            <div className="border w-main p-4 flex justify-between mt-8 m-auto">
-                <div className="w-4/5 flex-auto">
+            <div className="border lg:w-main p-4 flex flex-col lg:flex-row justify-between mx-3 mt-8 lg:mt-8 lg:m-auto">
+                <div className="w-full lg:w-4/5 flex-auto">
                     <span className="font-semibold text-sm">Filter By</span>
                     <div className="flex gap-4 mt-2">
                         <SearchItem
@@ -101,31 +101,29 @@ const Products = () => {
                             activeClick={active}
                             handleSetActive={handleSetActive}
                         />
-                        {category && (
-                            <SearchItem
-                                name="brand"
-                                activeClick={active}
-                                handleSetActive={handleSetActive}
-                            />
-                        )}
+                        <SearchItem
+                            name="brand"
+                            activeClick={active}
+                            handleSetActive={handleSetActive}
+                        />
                     </div>
                 </div>
-                <div className="w-1/5 flex-auto">
+                <div className="w-full lg:w-1/5 flex-auto">
                     <span className="font-semibold text-sm">Sort By</span>
                     <div className="w-full flex mt-2">
                         <SelectElement value={sort} options={sorts} changeValue={changeSort} />
                     </div>
                 </div>
             </div>
-            <div className="my-8 w-main m-auto">
-                <div className="grid grid-cols-4 gap-4 my-4 mx-[-10px]">
+            <div className="my-8 w-full lg:w-main px-3 lg:px-0 lg:m-auto">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-4 my-4 lg:mx-[-10px]">
                     {products?.products?.map((item, index) => {
                         return <Product key={index} product={item} />;
                     })}
                 </div>
             </div>
             {products?.counts / 10 > 1 && (
-                <div className="w-main m-auto my-4 flex justify-center">
+                <div className="lg:w-main m-auto my-4 flex justify-center">
                     <Pagination totalCount={products?.counts} page={params.get('page')} />
                 </div>
             )}

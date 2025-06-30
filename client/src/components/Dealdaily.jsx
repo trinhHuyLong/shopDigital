@@ -56,7 +56,7 @@ const DealDaily = () => {
     }, [hour, minute, second]);
 
     return (
-        <div onClick={handleClick} className="border flex-auto">
+        <div onClick={handleClick} className="border h-full pb-8 lg:pb-0">
             <div className="flex items-center justify-center p-4 w-full">
                 <span className="flex-1 flex justify-center">
                     <FaStar color="#DD1111" size={20} />

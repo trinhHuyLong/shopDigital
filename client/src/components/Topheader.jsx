@@ -33,7 +33,7 @@ const TopHeader = () => {
     }, [mes]);
 
     return (
-        <div className="w-full h-[38px] bg-main flex justify-center items-center text-white text-xs">
+        <div className="hidden md:flex w-full h-[38px] bg-main justify-center items-center text-white text-xs">
             <div className="w-main flex justify-between">
                 <div className="flex items-center">
                     <span>ORDER ONLINE OR CALL US (+1800) 000 8808</span>
