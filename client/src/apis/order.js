@@ -32,3 +32,10 @@ export const apiGetOderInMonth = query =>
         url: '/order/orderinmonth/',
         params: query,
     });
+
+export const apiCheckoutPayment = data =>
+    axios({
+        method: 'POST',
+        url: '/order/payment/',
+        data,
+    });

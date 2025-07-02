@@ -104,7 +104,7 @@ const DetailProd = () => {
                 showCancelButton: true,
                 confirmButtonText: 'Go login page',
             }).then(async rs => {
-                if (rs.isConfirmed) navigate(`${path.LOGIN}`);
+                if (rs.isConfirmed) navigate(`/${path.LOGIN}`);
             });
         }
         if (!quantity) {

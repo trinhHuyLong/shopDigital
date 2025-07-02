@@ -153,38 +153,16 @@ const Header = () => {
                         <div className="px-3">
                             {isLoggedIn && current ? (
                                 <small className="flex gap-2 text-sm items-center">
-                                    <div
-                                        onClick={() => setIsShowOption(!isShowOption)}
-                                        className="flex  items-center justify-center pr-3 border-r gap-2 cursor-pointer relative"
-                                        id="profile1"
+                                    <Link
+                                        className="p-2 hover:bg-sky-100 w-full flex gap-2 items-center"
+                                        to={`/${path.MEMBER}/${path.PERSIONAL}`}
                                     >
                                         <img
                                             src={current?.avatar || defaultAvatar}
-                                            className="w-6 h-6 rounded-full"
+                                            className="w-8 h-8 rounded-full"
                                         />
                                         <span>{current?.name}</span>
-                                        {isShowOption && (
-                                            <div
-                                                onClick={e => e.stopPropagation()}
-                                                className="absolute flex flex-col top-full left-[16px] bg-gray-700 min-w-[150px] py-2"
-                                            >
-                                                <Link
-                                                    className="p-2 hover:bg-sky-100 w-full"
-                                                    to={`/${path.MEMBER}/${path.PERSIONAL}`}
-                                                >
-                                                    Personal
-                                                </Link>
-                                                {current.role === 'admin' && (
-                                                    <Link
-                                                        className="p-2 hover:bg-sky-100 w-full"
-                                                        to={`/${path.ADMIN}/${path.DASHBOARD}`}
-                                                    >
-                                                        Admin workspace
-                                                    </Link>
-                                                )}
-                                            </div>
-                                        )}
-                                    </div>
+                                    </Link>
                                     <span
                                         onClick={() => ditpatch(logout())}
                                         className="px-2 py-1 bg-red-500"

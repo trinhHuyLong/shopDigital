@@ -8,9 +8,36 @@ import { apiUpdateCart, apiRemoveCart, apiCreateOder } from '../../apis';
 import { toast } from 'react-toastify';
 import { getCurrent } from '../../redux/user/asyncAction';
 import { MemberSideBar } from '../../components';
-import { FaTrashAlt } from 'react-icons/fa';
+import { FaSortAmountDown, FaTrashAlt } from 'react-icons/fa';
+
+import { CheckoutPayment } from '../../components';
+import { apiCheckoutPayment } from '../../apis';
 
 const DetailCart = () => {
+    const [showPayment, setShowPayment] = useState(false);
+
+    const handleCheckout = () => {
+        setShowPayment(true);
+    };
+
+    const handleVnpay = async () => {
+        setShowPayment(false);
+        const rs = await apiCheckoutPayment({ amount: totalPrice });
+        console.log(rs);
+        window.location.href = rs?.url;
+    };
+
+    const handleCash = async () => {
+        setShowPayment(false);
+        const response = await apiCreateOder();
+        if (response.success) {
+            toast.success('Checkout successful');
+            dispatch(getCurrent());
+        } else {
+            toast.error('Checkout failed');
+        }
+    };
+
     const [quantity, setQuantity] = useState({});
     const [open, setOpen] = useState(false);
     const { current } = useSelector(state => state.user);
@@ -30,6 +57,10 @@ const DetailCart = () => {
         }
         setQuantity(prev => ({ ...prev, [pid]: number }));
     };
+    const totalPrice = current?.cart?.reduce(
+        (sum, el) => sum + el?.product?.price * quantity[el._id],
+        0
+    );
     const handleUpdateCart = async () => {
         const promises = current?.cart?.map(async el => {
             if (quantity[el._id] !== 0) {
@@ -50,16 +81,6 @@ const DetailCart = () => {
         } else {
             toast.success('Update cart done');
             dispatch(getCurrent());
-        }
-    };
-
-    const handleCheckOut = async () => {
-        const response = await apiCreateOder();
-        if (response.success) {
-            toast.success('Checkout successful');
-            dispatch(getCurrent());
-        } else {
-            toast.error('Checkout failed');
         }
     };
 
@@ -175,7 +196,7 @@ const DetailCart = () => {
                                     Update cart
                                 </button>
                                 <button
-                                    onClick={handleCheckOut}
+                                    onClick={handleCheckout}
                                     className="bg-main text-white px-4 py-2 rounded-md hover:opacity-80"
                                 >
                                     Checkout
@@ -206,6 +227,7 @@ const DetailCart = () => {
                     </div>
                 </div>
             )}
+            {showPayment && <CheckoutPayment onVnpay={handleVnpay} onCash={handleCash} />}
         </div>
     );
 };

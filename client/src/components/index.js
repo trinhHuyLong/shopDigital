@@ -33,3 +33,4 @@ export { default as Select } from './Select';
 export { default as MarkdownEditor } from './MarkdownEditor';
 export { default as MemberSideBar } from './MemberSideBar';
 export { default as Cart } from './Cart';
+export { default as CheckoutPayment } from './CheckoutPayment';

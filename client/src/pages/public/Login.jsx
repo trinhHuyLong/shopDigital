@@ -136,7 +136,7 @@ const Login = () => {
         <div className="w-screen h-screen flex justify-center items-center relative">
             {isVeryfiEmail && (
                 <div className="animate-slide-right absolute top-0 right-0 left-0 bottom-0 bg-transparent z-50 justify-center flex flex-col py-8 items-center">
-                    <div className="bg-white w-[500px] rounded-md p-8">
+                    <div className="bg-white w-[90%] lg:w-[500px] rounded-md p-8 flex flex-col gap-3 lg:block">
                         <h3>
                             We send a code to your mail. Please check your mail and enter your code.
                         </h3>
@@ -156,7 +156,7 @@ const Login = () => {
             )}
             {isVeryfiNewPass && (
                 <div className="animate-slide-right absolute top-0 right-0 left-0 bottom-0 bg-transparent z-50 justify-center flex flex-col py-8 items-center">
-                    <div className="bg-white w-[500px] rounded-md p-8">
+                    <div className="bg-white lg:w-[500px] w-[90%] rounded-md p-8">
                         <h3>
                             We send a code to your mail. Please check your mail and enter your code.
                         </h3>
@@ -185,8 +185,8 @@ const Login = () => {
                 </div>
             )}
             {isForgotPassword && !isCreateNewPass && (
-                <div className="min-w-[500px] rounded-md p-8 bg-white absolute flex flex-col shadow-md justify-center items-center ">
-                    <div className="flex flex-col justify-center items-center w-[400px]">
+                <div className="lg:w-[500px] rounded-md p-8 bg-white absolute flex flex-col shadow-md justify-center items-center ">
+                    <div className="flex flex-col justify-center items-center lg:w-[400px]">
                         <h1 className="text-[30px] font-semibold text-main">Reset password</h1>
 
                         <div className="w-full py-6">
@@ -204,7 +204,7 @@ const Login = () => {
                             <div className="flex justify-end gap-5">
                                 <button
                                     onClick={handleForgotPassword}
-                                    className="w-[20%] bg-main cursor-pointer hover:opacity-80 text-white mt-5 py-2 rounded-md"
+                                    className="w-[30%] lg:w-[20%] bg-main cursor-pointer hover:opacity-80 text-white mt-5 py-2 rounded-md"
                                 >
                                     Submit
                                 </button>
@@ -214,7 +214,7 @@ const Login = () => {
                                         resetData();
                                         setInvalideFiedls([]);
                                     }}
-                                    className="w-[20%] bg-blue-600 cursor-pointer hover:opacity-80  text-white mt-5 py-2 rounded-md"
+                                    className="w-[30%] lg:w-[20%] bg-blue-600 cursor-pointer hover:opacity-80  text-white mt-5 py-2 rounded-md"
                                 >
                                     Cancel
                                 </button>
@@ -224,8 +224,8 @@ const Login = () => {
                 </div>
             )}
             {isForgotPassword && isCreateNewPass && (
-                <div className="min-w-[500px] rounded-md p-8 bg-white absolute flex flex-col shadow-md justify-center items-center ">
-                    <div className="flex flex-col justify-center items-center w-[400px]">
+                <div className="lg:w-[500px] w-[90%] rounded-md p-8 bg-white absolute flex flex-col shadow-md justify-center items-center ">
+                    <div className="flex flex-col justify-center items-center lg:w-[400px]">
                         <h1 className="text-[30px] font-semibold text-main">Reset password</h1>
 
                         <div className="w-full py-6">
@@ -238,6 +238,7 @@ const Login = () => {
                                     nameKey={'Password'}
                                     invalidFields={invalidFields}
                                     setInvalideFiedls={setInvalideFiedls}
+                                    type={'password'}
                                 />
                             </div>
                             <div className="mb-3">
@@ -253,7 +254,7 @@ const Login = () => {
                             <div className="flex justify-end gap-5">
                                 <button
                                     onClick={handleCreatePassword}
-                                    className="w-[20%] bg-main cursor-pointer hover:opacity-80 text-white mt-5 py-2 rounded-md"
+                                    className="lg:w-[20%] w-[30%] bg-main cursor-pointer hover:opacity-80 text-white mt-5 py-2 rounded-md"
                                 >
                                     Submit
                                 </button>
@@ -267,8 +268,8 @@ const Login = () => {
                 className="w-full h-full object-cover"
             />
             {!isForgotPassword && (
-                <div className="min-w-[500px] rounded-md p-8 bg-white absolute flex flex-col shadow-md justify-center items-center ">
-                    <div className="flex flex-col justify-center items-center w-[400px]">
+                <div className="w-[90%] lg:w-[500px] rounded-md p-8 bg-white absolute flex flex-col shadow-md justify-center items-center ">
+                    <div className="flex flex-col justify-center items-center lg:w-[400px]">
                         <h1 className="text-[30px] font-semibold text-main">
                             {isRegister ? 'Register' : 'Login'}
                         </h1>
@@ -322,7 +323,7 @@ const Login = () => {
                                 {isRegister ? 'Create' : 'Login'}
                             </button>
                         </div>
-                        <div className="text-sm flex justify-between w-full">
+                        <div className="text-sm flex flex-col lg:flex-row items-center lg:items-start justify-between w-full">
                             {!isRegister && (
                                 <>
                                     <span
