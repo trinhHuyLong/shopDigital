@@ -110,6 +110,8 @@ const vnpayPayment = asyncHandler(async (req, res) => {
         vnp_ExpireDate: dateFormat(expire, 'yyyyMMddHHmmss'),
     });
 
+    console.log('VNPAY Response:', vnpayResponse);
+
     return res.status(200).json({
         success: true,
         url: vnpayResponse,
