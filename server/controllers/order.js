@@ -104,7 +104,7 @@ const vnpayPayment = asyncHandler(async (req, res) => {
         vnp_ReturnUrl: 'http://localhost:5000/api/order/vnpay-return',
         vnp_Locale: 'vn',
         vnp_CreateDate: dateFormat(now, 'yyyyMMddHHmmss'),
-        vnp_ExpireDate: dateFormat(expire, 'yyyyMMddHHmmss'), // ✅ sửa định dạng
+        vnp_ExpireDate: dateFormat(expire, 'yyyyMMddHHmmss'),
     });
 
     return res.status(200).json({
