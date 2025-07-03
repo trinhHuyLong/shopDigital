@@ -1,6 +1,8 @@
 const asyncHandler = require('express-async-handler');
 const { VNPay, ignoreLogger, ProductCode, VnpLocale, dateFormat } = require('vnpay');
 
+require('dotenv').config();
+
 const Order = require('../models/order');
 const User = require('../models/user');
 
@@ -101,7 +103,7 @@ const vnpayPayment = asyncHandler(async (req, res) => {
         vnp_TxnRef: orderId,
         vnp_OrderInfo: `${_id} Thanh toan don hang #${orderId}`,
         vnp_OrderType: 'other',
-        vnp_ReturnUrl: 'http://localhost:5000/api/order/vnpay-return',
+        vnp_ReturnUrl: `${process.env.URL_SERVER}/api/order/vnpay-return`,
         vnp_Locale: 'vn',
         vnp_CreateDate: dateFormat(now, 'yyyyMMddHHmmss'),
         vnp_ExpireDate: dateFormat(expire, 'yyyyMMddHHmmss'),
