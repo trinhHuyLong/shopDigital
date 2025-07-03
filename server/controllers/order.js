@@ -98,8 +98,8 @@ const vnpayPayment = asyncHandler(async (req, res) => {
     console.log(process.env.SECURE_SECRET, 'SECURE_SECRET');
     console.log(process.env.VNPAY_HOST, 'VNPAY_HOST');
 
-    const now = new Date();
-    const expire = new Date(now.getTime() + 15 * 60 * 1000);
+    const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' }));
+    const expire = new Date(now.getTime() + 30 * 60 * 1000); // 30 phút
     const orderId = Date.now().toString();
 
     const vnpayResponse = await vnpay.buildPaymentUrl({
