@@ -84,10 +84,11 @@ const getOrders = asyncHandler(async (req, res) => {
 
 const vnpayPayment = asyncHandler(async (req, res) => {
     const { _id } = req.user;
+    console.log('User ID:', _id);
     const vnpay = new VNPay({
-        tmnCode: '7J44TV0G',
-        secureSecret: 'Q3Y714UBR5682PRPEZVVQ4ECVBIN9IT3',
-        vnpayHost: 'https://sandbox.vnpayment.vn',
+        tmnCode: process.env.TMN_CODE,
+        secureSecret: process.env.SECURE_SECRET,
+        vnpayHost: process.env.VNPAY_HOST,
         testMode: true,
         hashAlgorithm: 'SHA512',
         loggerFn: ignoreLogger,
@@ -223,7 +224,7 @@ const vnpayReturn = asyncHandler(async (req, res) => {
                     params.vnp_TxnRef || 'Không có'
                 }</strong></div>
 
-                <a href="http://localhost:5173/">Quay về trang chủ</a>
+                <a href=${process.env.CLIENT_URL}>Quay về trang chủ</a>
             </div>
         </body>
         </html>
