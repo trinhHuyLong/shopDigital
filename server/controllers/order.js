@@ -104,9 +104,9 @@ const vnpayPayment = asyncHandler(async (req, res) => {
 
     const vnpayResponse = await vnpay.buildPaymentUrl({
         vnp_Amount: req.body.amount,
-        vnp_IpAddr: '127.0.0.1',
+        vnp_IpAddr: req.headers['x-forwarded-for'] || req.connection.remoteAddress || '127.0.0.1',
         vnp_TxnRef: orderId,
-        vnp_OrderInfo: `${_id} Thanh toan don hang #${orderId}`,
+        vnp_OrderInfo: encodeURIComponent(`${_id} Thanh toan don hang #${orderId}`),
         vnp_OrderType: 'other',
         vnp_ReturnUrl: `${process.env.URL_SERVER}/api/order/vnpay-return`,
         vnp_Locale: 'vn',
