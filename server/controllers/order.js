@@ -94,6 +94,10 @@ const vnpayPayment = asyncHandler(async (req, res) => {
         loggerFn: ignoreLogger,
     });
 
+    console.log(process.env.TMN_CODE, 'TMN_CODE');
+    console.log(process.env.SECURE_SECRET, 'SECURE_SECRET');
+    console.log(process.env.VNPAY_HOST, 'VNPAY_HOST');
+
     const now = new Date();
     const expire = new Date(now.getTime() + 15 * 60 * 1000);
     const orderId = Date.now().toString();
@@ -110,6 +114,8 @@ const vnpayPayment = asyncHandler(async (req, res) => {
         vnp_ExpireDate: dateFormat(expire, 'yyyyMMddHHmmss'),
     });
 
+    console.log(process.env.URL_SERVER, 'URL_SERVER');
+
     console.log('VNPAY Response:', vnpayResponse);
 
     return res.status(200).json({
@@ -120,6 +126,8 @@ const vnpayPayment = asyncHandler(async (req, res) => {
 
 const vnpayReturn = asyncHandler(async (req, res) => {
     const params = req.query;
+    console.log('VNPAY RETURN:', req.query);
+
     const isSuccess = params.vnp_ResponseCode === '00';
     const amount = Number(params.vnp_Amount || 0) / 100;
 
