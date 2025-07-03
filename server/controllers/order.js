@@ -100,7 +100,7 @@ const vnpayPayment = asyncHandler(async (req, res) => {
 
     const vnpayResponse = await vnpay.buildPaymentUrl({
         vnp_Amount: req.body.amount,
-        vnp_IpAddr: req.ip || '127.0.0.1',
+        vnp_IpAddr: '127.0.0.1',
         vnp_TxnRef: orderId,
         vnp_OrderInfo: `${_id} Thanh toan don hang #${orderId}`,
         vnp_OrderType: 'other',
